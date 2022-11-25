@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Taviraj&display=swap');
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    font-family: 'Roboto', serif-sans;
+    padding: 2em;
+    vertical-align: middle;
+    background-color: #fffbfa;
+    color: #241e1e;
+}
+
+h1 {
+    font-family: 'Taviraj', serif;
+    margin-top: 1em;
+    font-weight: normal;
+    text-align: center;
+    color: #524343;
+}
+
+.section-write-opinion-button {
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 4em;
+}
+
+h3 {
+    font-size: 1em;
+}
+
+button,
+input[type=submit] {
+    background-color: #9c4046;
+    color: white;
+    border-width: 0px;
+    border-radius: 12em;
+    padding: 1em 2em 1em 2em;
+    font-size: 1.2em;
+}
+
+button:hover,
+input[type=submit]:hover {
+    background-color: #ffdadb;
+    color: #40000a;
+}
+
+button:active,
+input[type=submit]:active {
+    background-color: #400009;
+    color: #ffdadb;
+}
+
+.btn-secondary {
+    background-color: #ffdad9;
+    color: #34131f;
+}
+
+.btn-secondary:hover {
+    background-color: #9c4046;
+    color: white;
+}
+
+.btn-secondary:active {
+    background-color: #400009;
+    color: #ffdadb;
+}
+
+.emoji {
+    display: inline;
+    font-family: 'Noto Color Emoji';
+    font-size: 1em;
+    padding: 0.5em;
+}
+
+form>input,
+textarea {
+    display: block;
+}
+
+form>input {
+    margin-bottom: 1em;
+}
+
+article {
+    background-color: #f5f0f0;
+    margin: 2em;
+    padding: 1.5em 1em 1.5em 1em;
+    border-radius: 1rem;
+}
+
+article>header {
+    font-size: 2em;
+    padding-bottom: 0.2em;
+    color: #524343;
+}
+
+article>main {
+    font-size: 1em;
+    padding-bottom: 0.8em;
+}
+
+a {
+    color: #9c4046;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.opinions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.opinion {
+    flex-wrap: wrap;
+    display: flex;
+    flex-flow: column;
+    align-self: stretch;
+}
+
+.opinion>main {
+    height: 100%;
+    max-width: 20em;
+}
+
+.report-issue {
+    bottom: 0;
+    margin-top: 1em;
+}
+
+.reactions {
+    display: inline;
+    max-width: 20em;
+}
+
+.reaction {
+    padding: 0.5em;
+    min-width: 3em;
+    max-width: 5em;
+}
+
+.reaction>.emoji {
+    padding: 0;
+    font-size: 1em;
+}
+
+input[type=submit] {
+    margin-top: 1em;
+    margin-bottom: -1em;
+    width: 100%;
+}
+
+input[type=text],
+input[type=password] {
+    background-color: #f5f0f0;
+    font-size: 1.2em;
+    height: 2em;
+    border-width: 0px;
+    background-color: #dcd4d4;
+    border-radius: 0.2em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.sort-by-options {
+    display: inline-block;
+    margin-top: 2em;
+    text-align: center;
+    width: 100%;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.sort-by-options>input {
+    display: inline;
+}
+
+.sort-by-options>label {
+    margin-left: 2em;
+    margin-right: 2em;
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+
+input[type=radio] {
+    appearance: none;
+    border-radius: 50%;
+    background: transparent;
+    border: 3px solid #FFF;
+    box-shadow: 0 0 0 2px #241e1e;
+    width: 2em;
+    height: 2em;
+    margin-right: 2em;
+    vertical-align: middle;
+}
+
+input[type=radio]:checked {
+    background: #9c4046;
+    box-shadow: 0 0 0 2px #9c4046;
+}
+
+.foot {
+    display: block;
+    text-align: center;
+    font-family: 'Taviraj', serif;
+    margin-top: 2em;
+    padding: .5em;
+    background-color: #f5f0f0;
+    border-radius: 1rem;
+}
+
+
+@media screen and (max-width: 480px) {
+    h1 {
+        margin-top: 0em
+    }
+
+    article {
+        flex-basis: 100%;
+        margin: 2em 0em 0em 0em;
+    }
+
+    .sort-by-options>label {
+        font-size: 1em;
+        margin-left: 1em;
+        margin-right: 1em;
+    }
+
+}
