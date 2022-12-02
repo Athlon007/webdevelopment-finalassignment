@@ -7,6 +7,11 @@
 html {
     display: table;
     margin: auto;
+    width: 100%;
+}
+
+.not-full-screen {
+    width: auto;
 }
 
 body {
@@ -113,6 +118,7 @@ article>main {
 a {
     color: #9c4046;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:hover {
@@ -166,7 +172,8 @@ input[type=submit] {
 }
 
 input[type=text],
-input[type=password] {
+input[type=password],
+textarea {
     background-color: #f5f0f0;
     font-size: 1.2em;
     height: 2em;
@@ -224,6 +231,112 @@ input[type=radio]:checked {
     border-radius: 1rem;
 }
 
+.page,
+.admin-nav {
+    text-align: center;
+}
+
+.admin-nav {
+    background-color: #f5f0f0;
+    display: block;
+    padding: .5em;
+    border-radius: 1rem;
+}
+
+table {
+    margin-top: 1em;
+    background-color: #f5f0f0;
+    border-radius: 1rem;
+    padding: 1em;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.admin-panel-user-manage {
+    text-align: right;
+    justify-content: space-around;
+}
+
+.admin-panel-user-manage>* {
+    display: inline;
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+.admin-controls {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    width: 100%;
+}
+
+.edit-post {
+    background-color: #f5f0f0;
+    margin-top: 1em;
+    padding-right: 1em;
+    padding-left: 1em;
+    margin-left: 1em;
+    border-radius: 1rem;
+}
+
+.inline {
+    display: inline;
+}
+
+#editing-message {
+    font-weight: bold;
+}
+
+form>textarea {
+    width: 100%;
+    height: 8em;
+    margin-bottom: 0;
+}
+
+td>button {
+    font-size: 0.8em;
+}
+
+tr {
+    border-bottom: 1px solid #9c4046;
+}
+
+tr:first-child {
+    height: 3em;
+    border-bottom: 0px;
+}
+
+tr:last-child {
+    border-bottom: 0px;
+}
+
+td {
+    text-align: center;
+}
+
+td:nth-child(2) {
+    text-align: left;
+}
+
+td:first-child {
+    width: 4em;
+}
+
+td:nth-child(3) {
+    width: 8em;
+}
+
+#pick-topic {
+    width: 100%;
+    text-align: center;
+}
+
+select {
+    appearance: none;
+    border-width: 0px;
+    background-color: #ddd4d4;
+    padding: 0.5em 1em 0.5em 1em;
+    font-size: 1em;
+}
 
 @media screen and (max-width: 480px) {
     h1 {
@@ -241,4 +354,16 @@ input[type=radio]:checked {
         margin-right: 1em;
     }
 
+    .admin-controls {
+        grid-template-columns: 100%;
+    }
+
+    .edit-post {
+        background-color: #f5f0f0;
+        margin-top: 1em;
+        padding-right: 0em;
+        padding-left: 0em;
+        margin-left: 0em;
+        border-radius: 1rem;
+    }
 }

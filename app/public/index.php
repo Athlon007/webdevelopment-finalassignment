@@ -84,6 +84,11 @@
                 <a class="report-issue">Report...</a>
             </article>
         </section>
+        <nav class="page">
+            <button class="btn">1</button>
+            <button class="btn-secondary">2</button>
+            <button class="btn-secondary">2</button>
+        </nav>
         <footer class="foot">
             <p>
                 Copyright &copy; 2022 <a href="http://kfigura.nl">Konrad Figura</a>

@@ -1,5 +1,5 @@
 <!DOCTYPE>
-<html lang="en">
+<html class="not-full-screen" lang="en">
     <head>
         <title>My Opinion - Login</title>
         <link rel="stylesheet" href="css/styles.css"/>
