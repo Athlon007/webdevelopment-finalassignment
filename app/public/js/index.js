@@ -17,6 +17,7 @@ let reactionPanelJQ = $('#reaction-panel');
 reactionPanel.style.display = "block";
 let boundsReactionPanel = reactionPanel.getBoundingClientRect();
 reactionPanel.style.display = "none";
+let currentlyReactingToOpinion = -1;
 
 
 $(document).mouseup(function (e) {
@@ -76,5 +77,37 @@ function showReactionPanel(opinionID) {
     reactionPanel.style.top = y;
     reactionPanel.style.display = 'block';
 
-    document.getElementById('opinion-reaction').value = opinionID;
+    currentlyReactingToOpinion = opinionID;
+}
+
+function addNewReactionToOpinion(reactionID) {
+    var form = $('<form></form>');
+
+    form.attr("method", "post");
+    form.attr("action", "/");
+
+    var actionTypeField = $('<input></input>');
+    actionTypeField.attr("name", "actionType");
+    actionTypeField.attr("value", "reaction");
+    form.append(actionTypeField);
+
+    var opinionIDField = $('<input></input>');
+    opinionIDField.attr("name", "opinionID");
+    opinionIDField.attr("value", currentlyReactingToOpinion);
+    form.append(opinionIDField);
+
+    var reactionIDField = $('<input></input>');
+    reactionIDField.attr("name", "reactionID");
+    reactionIDField.attr("value", reactionID);
+    form.append(reactionIDField);
+
+    // The form needs to be a part of the document in
+    // order for us to be able to submit it.
+    $(document.body).append(form);
+    form.submit();
+}
+
+function increaseExistingOpinionCount(opinionID, reactionID) {
+    currentlyReactingToOpinion = opinionID;
+    addNewReactionToOpinion(reactionID);
 }

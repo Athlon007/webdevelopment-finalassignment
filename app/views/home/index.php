@@ -26,17 +26,17 @@
         </section>
         <section id="reaction-panel">
             <h3>React!</h3>
-            <form>
+            <section">
                 <?php
                 foreach ($reactionEntites as $reactionEntity) {
                     ?>
-                    <input class="reaction" type="submit" name="<?= $reactionEntity->getId() ?>" value="<?= $reactionEntity->getHtmlEntity() ?>"/>
+                    <button class="reaction" onclick="addNewReactionToOpinion(<?= $reactionEntity->getId()?>)"><?= $reactionEntity->getHtmlEntity() ?></button>
                 <?php
                 }
                 ?>
                 <input type="hidden" name="action" value="reaction"/>
                 <input type="hidden" id="opinion-reaction" name="opinionReaction" value=""/>
-            </form>
+            </section>
         </section>
         <header>
             <h1>Today's topic is...</h1>
@@ -48,12 +48,12 @@
         <section>
             <form class="sort-by-options" method="GET">
                 <label>
-                    <input type="radio" name="sortby" value="popular" onclick="this.form.submit();" checked>
+                    <input type="radio" name="sortby" value="popular" onclick="this.form.submit();" <?php if ($sortby == "popular") echo "checked" ?> >
                         Popular
                     </input>
                 </label>
                 <label>
-                    <input type="radio" name="sortby" value="new" onclick="this.form.submit();">
+                    <input type="radio" name="sortby" value="new" onclick="this.form.submit();" <?php if ($sortby == "new") echo "checked" ?>>
                         New
                     </input>
                 </label>
@@ -70,22 +70,30 @@
                     <?php
                     foreach ($opinion->getAllReactions() as $reaction) {
                     ?>
-                    <button class="reaction">
+                    <button class="reaction" onclick="increaseExistingOpinionCount(<?= $opinion->getId() ?>, <?= $reaction->getId() ?>)">
                         <p class="emoji">
                             <?= $reaction->getReactionEntity()->getHtmlEntity() ?>
                         </p> <?= $reaction->getCount() ?>
                     </button>
                     <?php } ?>
-                    <button class="reaction btn-secondary" id="button-add-reaction-<?= $opinion->getId() ?>" onclick="showReactionPanel(<?= $opinion->getId() ?>);">+</button>
+                    <button class="reaction btn-secondary"
+                    id="button-add-reaction-<?= $opinion->getId() ?>"
+                    onclick="showReactionPanel(<?= $opinion->getId() ?>);">+</button>
                 </section>
                 <a class="report-issue">Report...</a>
             </article>
             <?php } ?>
         </section>
         <nav class="page">
-            <button class="btn">1</button>
-            <button class="btn-secondary">2</button>
-            <button class="btn-secondary">2</button>
+            <?php
+            for ($i = 0; $i < $pagesCount; $i++) {
+            ?>
+                <button class=
+                "<?php echo (($i + 1 == $currentPage) ? 'btn' : 'btn-secondary') ?>"
+                ><?= strval($i + 1) ?></button>
+            <?php
+            }
+            ?>
         </nav>
         <footer class="foot">
             <p>

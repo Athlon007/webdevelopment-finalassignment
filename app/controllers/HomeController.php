@@ -5,7 +5,7 @@ class HomeController
     {
         if ($this->isPosting())
         {
-            $this->postOpinion();
+            $this->handlePost();
             $this->reload();
             die();
         }
@@ -14,12 +14,22 @@ class HomeController
         require_once("../services/OpinionService.php");
         require_once("../services/ReactionEntityService.php");
 
+        $sortby = "popular";
+        if (isset($_GET) && isset($_GET["sortby"]) && $_GET["sortby"] == "new") {
+            $sortby = "new";
+        }
+
         $settingsService = new SettingsService();
         $settings = $settingsService->getSettings();
         $topic = $settings->getSelectedTopic();
 
         $opinionService = new OpinionService();
-        $opinions = $opinionService->getOpinionsForTopic($topic);
+        $opinions = $sortby == "popular"
+        ? $opinionService->getOpinionsForTopicByPopular($topic)
+        : $opinionService->getOpinionsForTopicByNew($topic);
+
+        $currentPage = 1; // TODO: Update current page number.
+        $pagesCount = $opinionService->pagesForTopic($topic);
 
         $reactionEntityService = new ReactionEntityService();
         $reactionEntites = $reactionEntityService->getAll();
@@ -38,19 +48,35 @@ class HomeController
         die();
     }
 
-    private function postOpinion()
+    private function handlePost()
     {
         try {
-            require_once("../services/OpinionService.php");
             if (isset($_POST["title"]) && isset($_POST["content"]) && isset($_POST["topicID"])) {
+                require_once("../services/OpinionService.php");
                 $opinionService = new OpinionService();
                 $opinionService->insertOpinion($_POST["topicID"], $_POST["title"], $_POST["content"]);
+            } elseif (isset($_POST["actionType"])) {
+                $this->reactToOpinion();
             } else {
                 throw new ErrorException("Something went wrong while posting a new opinion");
             }
         } catch (Exception $ex) {
             # TODO: Improve that bit.
+            print_r($_POST);
             echo $ex->getMessage();
         }
+    }
+
+    private function reactToOpinion()
+    {
+        if (!(isset($_POST["actionType"]) && isset($_POST["opinionID"]) && isset($_POST["reactionID"]))) {
+            throw new ErrorException("Missing parameters for reaction.");
+        }
+
+        require_once("../services/ReactionService.php");
+        $opinionID = $_POST["opinionID"];
+        $reactionID = $_POST["reactionID"];
+        $reactionService = new ReactionService();
+        $reactionService->addReaction($opinionID, $reactionID);
     }
 }

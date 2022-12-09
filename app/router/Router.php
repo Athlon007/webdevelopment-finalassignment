@@ -4,6 +4,7 @@ class Router
 {
     public function route($request) : void
     {
+        $request = explode('?', $request)[0];
         if ($request == "/" || str_starts_with($request, "/home/")) {
             $this->routeHome($request);
         } elseif (str_starts_with($request, "/admin/")) {

@@ -7,12 +7,15 @@ class Settings
     private Topic $selectedTopic;
     private $dateLastTopicSelected;
     private int $hideOptionsWithNReports;
+    private int $maxReactionsPerPage;
 
-    public function __construct(Topic $selectedTopic, $dateLastTopicSelected, int $hideOptionsWithNReports)
+    public function __construct(Topic $selectedTopic, $dateLastTopicSelected,
+                                int $hideOptionsWithNReports, int $maxReactionsPerPage)
     {
         $this->selectedTopic = $selectedTopic;
         $this->dateLastTopicSelected = $dateLastTopicSelected;
         $this->hideOptionsWithNReports = $hideOptionsWithNReports;
+        $this->maxReactionsPerPage = $maxReactionsPerPage;
     }
 
     public function getSelectedTopic() : Topic
@@ -43,5 +46,15 @@ class Settings
     public function setHideOptionsWithNReports(int $value) : void
     {
         $this->hideOptionsWithNReports = $value;
+    }
+
+    public function getMaxReactionsPerPage() : int
+    {
+        return $this->maxReactionsPerPage;
+    }
+
+    public function setMaxReactionsPerPage(int $value) : void
+    {
+        $this->maxReactionsPerPage = $value;
     }
 }
