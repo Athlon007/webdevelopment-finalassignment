@@ -19,6 +19,12 @@ let boundsReactionPanel = reactionPanel.getBoundingClientRect();
 reactionPanel.style.display = "none";
 let currentlyReactingToOpinion = -1;
 
+// List of emojis displayed next to "Send" button.
+let allowedSendEntities = ["&#128563;", "&#128561;", "&#129300;", "&#129763;",
+    "&#129325;", "&#129323;", "&#128558;", "&#129396;", "&#128569;", "&#128576;",
+    "&#129299;", "&#129312;", "&#129315;", "&#129316;", "&#129322;", "&#129488;"]
+let lastSendEntity = '';
+
 
 $(document).mouseup(function (e) {
     // Hide reaction panel on click outside of it.
@@ -34,8 +40,21 @@ $(document).mouseup(function (e) {
 
 // Ran when "create new opinion" panel is shown.
 function showOpinionPanel() {
+    let btnSubmit = document.getElementById('btn-submit-opinion');
+    var mdiv = document.createElement("div");
+    mdiv.innerHTML = "Send " + getNewSendButtonEntity();
+    btnSubmit.value = (mdiv.textContent || mdiv.innerHTML);
     opinionPanel.style.display = 'block';
     cleanOpinionPanelForm();
+}
+
+function getNewSendButtonEntity() {
+    let entity;
+    do {
+        entity = allowedSendEntities[Math.floor(Math.random() * allowedSendEntities.length)];
+    } while (entity == lastSendEntity);
+    lastSendEntity = entity;
+    return entity;
 }
 
 // Ran when hiding the "create new opinion" panel.
@@ -73,8 +92,8 @@ function showReactionPanel(opinionID) {
     let x = boundsButtonSender.left - boundsReactionPanel.width / 2 + boundsReactionPanel.width / 8 + window.scrollX;
     let y = boundsButtonSender.top - boundsReactionPanel.height - boundsButtonSender.height * 0.2 + window.scrollY;
 
-    reactionPanel.style.left = x;
-    reactionPanel.style.top = y;
+    reactionPanel.style.left = x + "px";
+    reactionPanel.style.top = y + "px";
     reactionPanel.style.display = 'block';
 
     currentlyReactingToOpinion = opinionID;
@@ -110,4 +129,29 @@ function addNewReactionToOpinion(reactionID) {
 function increaseExistingOpinionCount(opinionID, reactionID) {
     currentlyReactingToOpinion = opinionID;
     addNewReactionToOpinion(reactionID);
+}
+
+function changePage(pageNumber) {
+    var form = $("<form style='display: none'></form>");
+
+    form.attr("method", "get");
+    form.attr("action", "/");
+
+    if (window.location.search.includes("sortby=")) {
+        let urlParams = new URLSearchParams(window.location.search);
+
+        var sortbyField = $('<input></input>');
+        sortbyField.attr("name", "sortby");
+        sortbyField.attr("value", urlParams.get("sortby"));
+        form.append(sortbyField);
+    }
+
+    var pageNumberField = $('<input></input>');
+    pageNumberField.attr("name", "page");
+    pageNumberField.attr("value", pageNumber);
+    form.append(pageNumberField);
+
+    $(document.body).append(form);
+
+    form.submit();
 }

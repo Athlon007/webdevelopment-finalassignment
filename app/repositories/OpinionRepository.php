@@ -18,11 +18,18 @@ class OpinionRepository extends Repository
         return $output;
     }
 
-    public function getOpinionsForTopic(Topic $topic, bool $descending = false) : array
+    public function getOpinionsForTopic(Topic $topic, bool $descending = false,
+                                        int $offset = -1, int $limit = -1) : array
     {
         $query = "SELECT id, title, content, topicID FROM Opinions WHERE topicID = :topicID";
         if ($descending) {
             $query = $query . " ORDER BY id DESC";
+        }
+        if ($limit >= 0) {
+            $query = $query . " LIMIT $limit";
+        }
+        if ($offset >= 0) {
+            $query = $query . " OFFSET $offset";
         }
 
         $stmt = $this->connection->prepare($query);
@@ -33,7 +40,8 @@ class OpinionRepository extends Repository
         return $this->opinionBuilder($stmt->fetchAll(), $topic);
     }
 
-    public function getOpinionsForTopicByPopularity(Topic $topic, bool $descending) : array
+    public function getOpinionsForTopicByPopularity(Topic $topic, bool $descending,
+                                                    int $offset = -1, int $limit = -1) : array
     {
         $query = "SELECT Opinions.id, Opinions.title, Opinions.content, Opinions.topicID, " .
             "IFNULL(SUM(Reactions.count), 0) as reactions " .
@@ -44,6 +52,13 @@ class OpinionRepository extends Repository
 
         if ($descending) {
             $query = $query . "ORDER BY reactions DESC";
+        }
+
+        if ($limit >= 0) {
+            $query = $query . " LIMIT $limit";
+        }
+        if ($offset >= 0) {
+            $query = $query . " OFFSET $offset";
         }
 
         $stmt = $this->connection->prepare($query);

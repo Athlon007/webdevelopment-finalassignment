@@ -2,19 +2,25 @@
 require_once("../models/Opinion.php");
 require_once("../repositories/OpinionRepository.php");
 require_once("ReactionService.php");
+require_once("SettingsService.php");
 
 class OpinionService
 {
     private OpinionRepository $repo;
+    private SettingsService $settingsService;
 
     public function __construct()
     {
         $this->repo = new OpinionRepository();
+        $this->settingsService = new SettingsService();
     }
 
     public function getOpinionsForTopicByNew(Topic $topic)
     {
-        $opinions = $this->repo->getOpinionsForTopic($topic, true);
+        $offset = $this->getPageOffset();
+        $limit = $this->getOpinionsLimit();
+
+        $opinions = $this->repo->getOpinionsForTopic($topic, true, $offset, $limit);
 
         $reactionService = new ReactionService();
         for ($i = 0; $i < count($opinions); $i++) {
@@ -29,7 +35,10 @@ class OpinionService
 
     public function getOpinionsForTopicByPopular(Topic $topic) : array
     {
-        $opinions = $this->repo->getOpinionsForTopicByPopularity($topic, true);
+        $offset = $this->getPageOffset();
+        $limit = $this->getOpinionsLimit();
+
+        $opinions = $this->repo->getOpinionsForTopicByPopularity($topic, true, $offset, $limit);
 
         $reactionService = new ReactionService();
         for ($i = 0; $i < count($opinions); $i++) {
@@ -53,10 +62,25 @@ class OpinionService
     // Returns how many pages are there supposed to be for the specific topic.
     public function pagesForTopic(Topic $topic) : int
     {
-        require_once("SettingsService.php");
-        $settingsService = new SettingsService();
-        $settings = $settingsService->getSettings();
-
+        $settings = $this->settingsService->getSettings();
         return ceil($this->repo->getOpinionsForTopicCount($topic) / $settings->getMaxReactionsPerPage());
+    }
+
+    public function getPageOffset()
+    {
+        $page = 1;
+        if (isset($_GET) && isset($_GET["page"])) {
+            $page = $_GET["page"];
+        }
+
+        $settings = $this->settingsService->getSettings();
+
+        return ($page - 1) * $settings->getMaxReactionsPerPage();
+    }
+
+    public function getOpinionsLimit()
+    {
+        $settings = $this->settingsService->getSettings();
+        return $settings->getMaxReactionsPerPage();
     }
 }

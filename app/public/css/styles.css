@@ -141,7 +141,7 @@ a:hover {
 
 .opinion>main {
     height: 100%;
-    max-width: 20em;
+    max-width: 30em;
 }
 
 .report-issue {
@@ -180,8 +180,8 @@ textarea {
     border-width: 0px;
     background-color: #dcd4d4;
     border-radius: 0.2em;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 0em;
+    padding-right: 0em;
 }
 
 .sort-by-options {
@@ -219,6 +219,13 @@ input[type=radio] {
 input[type=radio]:checked {
     background: #9c4046;
     box-shadow: 0 0 0 2px #9c4046;
+}
+
+input[type=radio]:hover,
+input[type=submit]:hover,
+button,
+label:has(input[type=radio]):hover {
+    cursor: pointer;
 }
 
 .foot {
@@ -458,5 +465,10 @@ select {
         padding-left: 0em;
         margin-left: 0em;
         border-radius: 1rem;
+    }
+
+    #input-opinion-panel-content {
+        width: 75%;
+        height: 85%;
     }
 }

@@ -1,9 +1,10 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <meta name="theme-color" content="#fffbfa">
         <title>My Opinion</title>
         <link rel="stylesheet" href="css/styles.css"/>
     </head>
@@ -20,7 +21,7 @@
                     <textarea name="content" id="content-input" required maxlength="512" oninput="validateContentInput();"></textarea>
                     <label class="input-char-counter" id="content-char-counter">0/0</label>
                     <input type="hidden" name="topicID" value="<?= $topic->getId() ?>"/>
-                    <input type="submit">
+                    <input id="btn-submit-opinion" class="emoji" type="submit" value="Send!">
                 </form>
             </section>
         </section>
@@ -43,10 +44,10 @@
             <h2 class="topic"><?= $topic->getName() ?></h2>
         </header>
         <section class="section-write-opinion-button">
-            <button onclick="showOpinionPanel();" class="btn-write-topic"><p class="emoji">&#9997</p> Write opinion</button>
+            <button onclick="showOpinionPanel();" class="btn-write-topic"><p class="emoji">&#9997;</p> Write opinion</button>
         </section>
         <section>
-            <form class="sort-by-options" method="GET">
+            <form class="sort-by-options" method="GET" id="sort-by-form">
                 <label>
                     <input type="radio" name="sortby" value="popular" onclick="this.form.submit();" <?php if ($sortby == "popular") echo "checked" ?> >
                         Popular
@@ -70,7 +71,9 @@
                     <?php
                     foreach ($opinion->getAllReactions() as $reaction) {
                     ?>
-                    <button class="reaction" onclick="increaseExistingOpinionCount(<?= $opinion->getId() ?>, <?= $reaction->getId() ?>)">
+                    <button class="reaction" onclick="increaseExistingOpinionCount(<?= $opinion->getId() ?>, <?php
+                    $reactionID = $reaction->getReactionEntity()->getID();
+                    echo $reactionID; ?>)">
                         <p class="emoji">
                             <?= $reaction->getReactionEntity()->getHtmlEntity() ?>
                         </p> <?= $reaction->getCount() ?>
@@ -90,6 +93,7 @@
             ?>
                 <button class=
                 "<?php echo (($i + 1 == $currentPage) ? 'btn' : 'btn-secondary') ?>"
+                onclick="changePage(<?= strval($i+1)?>)"
                 ><?= strval($i + 1) ?></button>
             <?php
             }

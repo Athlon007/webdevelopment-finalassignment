@@ -28,7 +28,7 @@ class HomeController
         ? $opinionService->getOpinionsForTopicByPopular($topic)
         : $opinionService->getOpinionsForTopicByNew($topic);
 
-        $currentPage = 1; // TODO: Update current page number.
+        $currentPage = $this->getCurrentPage();
         $pagesCount = $opinionService->pagesForTopic($topic);
 
         $reactionEntityService = new ReactionEntityService();
@@ -63,7 +63,8 @@ class HomeController
         } catch (Exception $ex) {
             # TODO: Improve that bit.
             print_r($_POST);
-            echo $ex->getMessage();
+            echo $ex->getMessage() . "<br>";
+            echo $ex->getTraceAsString();
         }
     }
 
@@ -78,5 +79,14 @@ class HomeController
         $reactionID = $_POST["reactionID"];
         $reactionService = new ReactionService();
         $reactionService->addReaction($opinionID, $reactionID);
+    }
+
+    private function getCurrentPage()
+    {
+        if (!(isset($_GET) && isset($_GET["page"]))) {
+            return 1;
+        }
+
+        return $_GET["page"];
     }
 }
