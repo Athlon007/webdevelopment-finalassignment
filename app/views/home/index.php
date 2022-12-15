@@ -5,13 +5,15 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <meta name="theme-color" content="#fffbfa">
+        <meta name="description" content="Share your thoughts on topics picked every 24 hours!">
+        <meta name=”robots” content="index, follow">
         <title>My Opinion</title>
         <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
     </head>
     <body>
         <section class="overlay" id="input-opinion-panel">
             <section class="overlay-content" id="input-opinion-panel-content">
-                <button class="btn-overlay-small">X</button>
+                <button class="btn-overlay-close">X</button>
                 <h2>Submit</h2>
                 <form method="POST">
                     <label for="title">Title</label>
@@ -104,7 +106,7 @@
             for ($i = 0; $i < $pagesCount; $i++) {
             ?>
                 <button class=
-                "<?php echo (($i + 1 == $currentPage) ? 'btn' : 'btn-secondary') ?>"
+                "<?php echo ($i + 1 == $currentPage) ? 'btn' : 'btn-secondary' ?>"
                 onclick="changePage(<?= strval($i+1)?>)"
                 ><?= strval($i + 1) ?></button>
             <?php
@@ -116,7 +118,8 @@
                 Copyright &copy; 2022 <a href="http://kfigura.nl">Konrad Figura</a>
             </p>
         </footer>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="/js/index.js"></script>
+        <script type="application/javascript"
+         src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script type="application/javascript" src="/js/index.js"></script>
     </body>
 </html>

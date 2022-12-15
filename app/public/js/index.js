@@ -32,7 +32,7 @@ for (let overlay of overlays) {
             throw new Error("Overlay content is missing");
         }
 
-        let btnClose = overlayContent.getElementsByClassName('btn-overlay-small')[0];
+        let btnClose = overlayContent.getElementsByClassName('btn-overlay-close')[0];
         if (btnClose == null) {
             throw new Error('Close Button is missing');
         }
@@ -87,15 +87,13 @@ function getNewSendButtonEntity() {
 // Resets the form used for creating the opinion.
 function cleanOpinionPanelForm() {
     titleInput.value = '';
-    titleCharsetCounter.innerHTML = "0/" + titleMaxChars;
-
     contentInput.value = "";
-    contentCharsetCounter.innerHTML = "0/" + contentMaxChars;
+    validateTitleInput();
+    validateContentInput();
 }
 
 // Basically, updates the input counter for the Title of the opinion.
 function validateTitleInput() {
-    // Get the length of the field.
     let charsCount = titleInput.value.length;
     titleCharsetCounter.innerHTML = charsCount + "/" + titleMaxChars;
 }
