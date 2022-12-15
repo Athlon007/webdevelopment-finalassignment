@@ -5,9 +5,9 @@ class Router
     public function route($request) : void
     {
         $request = explode('?', $request)[0];
-        if ($request == "/" || str_starts_with($request, "/home/")) {
+        if ($request == "/" || str_starts_with($request, "/home")) {
             $this->routeHome($request);
-        } elseif (str_starts_with($request, "/admin/")) {
+        } elseif (str_starts_with($request, "/admin")) {
             $this->routeAdmin($request);
         } else {
             $this->route404();
@@ -20,7 +20,10 @@ class Router
         $controller = new HomeController();
         switch ($request) {
             case "/":
+            case "/home":
+            case "/home/":
             case "/home/index":
+            case "/home/index/":
                 $controller->index();
                 break;
             default:
@@ -31,12 +34,22 @@ class Router
 
     private function routeAdmin($request) : void
     {
-        # code...
+        require("../controllers/AdminController.php");
+        $controller = new AdminController();
+        switch ($request) {
+            case "/admin":
+            case "/admin/":
+                $controller->index();
+                break;
+            default:
+                $this->route404();
+                break;
+        }
     }
 
     private function route404() : void
     {
-        // TODO: add 404 redirect.
-        echo "404";
+        http_response_code(404);
+        require("../views/404.php");
     }
 }

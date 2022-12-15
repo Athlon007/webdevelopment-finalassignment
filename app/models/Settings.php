@@ -1,6 +1,6 @@
 <?php
 
-require("Topic.php");
+require_once("Topic.php");
 
 class Settings
 {

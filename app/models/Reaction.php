@@ -1,5 +1,4 @@
 <?php
-
 require_once("ReactionEntity.php");
 require_once("Opinion.php");
 

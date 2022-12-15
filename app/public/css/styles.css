@@ -10,12 +10,8 @@ html {
     width: 100%;
 }
 
-.not-full-screen {
-    width: auto;
-}
-
 body {
-    font-family: 'Roboto', serif-sans;
+    font-family: 'Roboto', 'Arial', 'Helvetica', sans-serif;
     padding: 2em;
     vertical-align: middle;
     background-color: #fffbfa;
@@ -23,15 +19,11 @@ body {
 }
 
 h1 {
-    font-family: 'Taviraj', serif;
+    font-family: 'Taviraj', 'Times New Roman', serif;
     margin-top: 1em;
     font-weight: normal;
     text-align: center;
     color: #524343;
-}
-
-.section-write-opinion-button {
-    text-align: center;
 }
 
 h2 {
@@ -54,6 +46,11 @@ input[type=submit] {
     font-size: 1.2em;
 }
 
+img {
+    border-width: 0px;
+    border-radius: 1em;
+}
+
 button:hover,
 input[type=submit]:hover {
     background-color: #ffdadb;
@@ -64,6 +61,12 @@ button:active,
 input[type=submit]:active {
     background-color: #400009;
     color: #ffdadb;
+}
+
+.center,
+.page,
+.foot {
+    text-align: center;
 }
 
 .btn-secondary {
@@ -81,8 +84,25 @@ input[type=submit]:active {
     color: #ffdadb;
 }
 
+.btn-overlay-small {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 6ex;
+    height: 6ex;
+    margin-top: 0em;
+    margin-right: 0em;
+    min-width: 1em;
+    min-height: 1em;
+    text-align: center;
+    display: inline-block;
+    font-size: 0.8em;
+    z-index: 500;
+    padding: 1em;
+    border-radius: 1rem;
+}
+
 .emoji {
-    display: inline;
     font-family: 'Noto Color Emoji';
     font-size: 1em;
     padding: 0.5em;
@@ -93,8 +113,8 @@ textarea {
     display: block;
 }
 
-form>input {
-    margin-bottom: 1em;
+textarea {
+    resize: none;
 }
 
 article {
@@ -118,7 +138,6 @@ article>main {
 a {
     color: #9c4046;
     text-decoration: none;
-    cursor: pointer;
 }
 
 a:hover {
@@ -137,11 +156,13 @@ a:hover {
     display: flex;
     flex-flow: column;
     align-self: stretch;
+    flex-grow: 1;
+    max-width: 50%;
 }
 
 .opinion>main {
     height: 100%;
-    max-width: 30em;
+    max-width: 100%;
 }
 
 .report-issue {
@@ -150,7 +171,6 @@ a:hover {
 }
 
 .reactions {
-    display: inline;
     max-width: 20em;
 }
 
@@ -184,7 +204,7 @@ textarea {
     padding-right: 0em;
 }
 
-.sort-by-options {
+.radio-list {
     display: inline-block;
     margin-top: 2em;
     text-align: center;
@@ -193,11 +213,7 @@ textarea {
     vertical-align: middle;
 }
 
-.sort-by-options>input {
-    display: inline;
-}
-
-.sort-by-options>label {
+.radio-list>label {
     margin-left: 2em;
     margin-right: 2em;
     font-size: 1.1em;
@@ -224,13 +240,13 @@ input[type=radio]:checked {
 input[type=radio]:hover,
 input[type=submit]:hover,
 button,
-label:has(input[type=radio]):hover {
+label:has(input[type=radio]):hover,
+a {
     cursor: pointer;
 }
 
 .foot {
     display: block;
-    text-align: center;
     font-family: 'Taviraj', serif;
     margin-top: 2em;
     padding: .5em;
@@ -238,59 +254,12 @@ label:has(input[type=radio]):hover {
     border-radius: 1rem;
 }
 
-.page,
-.admin-nav {
-    text-align: center;
-}
 
-.admin-nav {
-    background-color: #f5f0f0;
-    display: block;
-    padding: .5em;
-    border-radius: 1rem;
-}
-
-table {
-    margin-top: 1em;
-    background-color: #f5f0f0;
-    border-radius: 1rem;
-    padding: 1em;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-.admin-panel-user-manage {
-    text-align: right;
-    justify-content: space-around;
-}
-
-.admin-panel-user-manage>* {
+.inline,
+.radio-list>input,
+.reactions,
+.emoji {
     display: inline;
-    padding-right: 1em;
-    padding-left: 1em;
-}
-
-.admin-controls {
-    display: grid;
-    grid-template-columns: 75% 25%;
-    width: 100%;
-}
-
-.edit-post {
-    background-color: #f5f0f0;
-    margin-top: 1em;
-    padding-right: 1em;
-    padding-left: 1em;
-    margin-left: 1em;
-    border-radius: 1rem;
-}
-
-.inline {
-    display: inline;
-}
-
-#editing-message {
-    font-weight: bold;
 }
 
 form>textarea {
@@ -299,53 +268,7 @@ form>textarea {
     margin-bottom: 0;
 }
 
-td>button {
-    font-size: 0.8em;
-}
-
-tr {
-    border-bottom: 1px solid #9c4046;
-}
-
-tr:first-child {
-    height: 3em;
-    border-bottom: 0px;
-}
-
-tr:last-child {
-    border-bottom: 0px;
-}
-
-td {
-    text-align: center;
-}
-
-td:nth-child(2) {
-    text-align: left;
-}
-
-td:first-child {
-    width: 4em;
-}
-
-td:nth-child(3) {
-    width: 8em;
-}
-
-#pick-topic {
-    width: 100%;
-    text-align: center;
-}
-
-select {
-    appearance: none;
-    border-width: 0px;
-    background-color: #ddd4d4;
-    padding: 0.5em 1em 0.5em 1em;
-    font-size: 1em;
-}
-
-#input-opinion-panel {
+.overlay {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -353,12 +276,13 @@ select {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
     display: none;
     z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
 }
 
-#input-opinion-panel-content {
+.overlay-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -372,39 +296,18 @@ select {
     padding: 3rem;
 }
 
-#input-opinion-hide {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 6ex;
-    height: 6ex;
-    margin-top: 0em;
-    margin-right: 0em;
-    min-width: 1em;
-    min-height: 1em;
-    text-align: center;
-    display: inline-block;
-    font-size: 0.8em;
-    z-index: 500;
-    padding: 1em;
-    border-radius: 1rem;
-}
-
 .input-char-counter {
     display: block;
-    margin-top: -1rem;
+    margin-top: 0rem;
     margin-bottom: 1rem;
 }
 
-#content-char-counter {
-    margin-top: 0rem;
-}
 
-#title-input {
+.overlay-content>form>input {
     width: 100%;
 }
 
-#reaction-panel {
+.popup {
     position: absolute;
     background-color: #f5f0f0;
     border-radius: 1rem;
@@ -414,60 +317,46 @@ select {
     box-shadow: 0 5px 10px #241e1e62;
 }
 
-#reaction-panel form {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-
-#reaction-panel h3 {
+.popup header {
     text-align: center;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
     font-size: 1.2em;
+    font-weight: bold;
 }
 
-#reaction-panel form>* {
-    margin-left: 1em;
-    width: 4em;
-    padding: 0.5em;
+.popup main {
+    text-align: center;
+    justify-items: center;
 }
 
-#reaction-panel form>*:first-child {
-    margin-left: 0em;
-}
-
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 834px) {
     h1 {
-        margin-top: 0em
+        margin-top: 0em;
     }
 
     article {
         flex-basis: 100%;
         margin: 2em 0em 0em 0em;
+
     }
 
-    .sort-by-options>label {
+    .opinions {
+        justify-content: stretch;
+        flex-shrink: 0;
+    }
+
+    .opinion {
+        max-width: 100%;
+    }
+
+    .radio-list>label {
         font-size: 1em;
         margin-left: 1em;
         margin-right: 1em;
     }
 
-    .admin-controls {
-        grid-template-columns: 100%;
-    }
-
-    .edit-post {
-        background-color: #f5f0f0;
-        margin-top: 1em;
-        padding-right: 0em;
-        padding-left: 0em;
-        margin-left: 0em;
-        border-radius: 1rem;
-    }
-
-    #input-opinion-panel-content {
+    .overlay-content {
         width: 75%;
         height: 85%;
     }
