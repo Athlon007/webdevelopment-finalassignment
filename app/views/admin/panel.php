@@ -121,11 +121,11 @@
                         <input type="hidden" id="editor-id" name="opinion-id" value="">
                         <div class="form-group m-2">
                             <label for="title">Title</label>
-                            <input id="editor-title" type="text" class="form-control" name="title" disabled>
+                            <input id="editor-title" max="32" type="text" class="form-control" name="title" disabled>
                         </div>
                         <div class="form-group m-2">
                             <label for="content">Content</label>
-                            <textarea id="editor-content" class="form-control" rows="10" name="content" disabled></textarea>
+                            <textarea id="editor-content" max="512" class="form-control" rows="10" name="content" disabled></textarea>
                         </div>
                         <div class="form-group mt-4 m-2">
                             <input id="btn-edit" class="btn btn-primary" type="submit" value="Update" disabled>
