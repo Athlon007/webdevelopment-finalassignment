@@ -17,7 +17,11 @@ class SettingsRepository extends Repository {
             $maxReactionsPerPage = $row["maxReactionsPerPage"];
         }
 
-        return new Settings($selectedNthTopic, $dateLastTopicSelected,
-                            $hideOpinionsWithNReports, $maxReactionsPerPage);
+        return new Settings(
+            $selectedNthTopic,
+            $dateLastTopicSelected,
+            $hideOpinionsWithNReports,
+            $maxReactionsPerPage
+        );
     }
 }

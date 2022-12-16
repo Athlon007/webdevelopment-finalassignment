@@ -5,7 +5,7 @@ require_once("Repository.php");
 
 class OpinionRepository extends Repository
 {
-    private function opinionBuilder(array $arr, Topic $topic) : array
+    private function opinionBuilder(array $arr, Topic $topic): array
     {
         $output = array();
         foreach ($arr as $row) {
@@ -18,9 +18,12 @@ class OpinionRepository extends Repository
         return $output;
     }
 
-    public function getOpinionsForTopic(Topic $topic, bool $descending = false,
-                                        int $offset = -1, int $limit = -1) : array
-    {
+    public function getOpinionsForTopic(
+        Topic $topic,
+        bool $descending = false,
+        int $offset = -1,
+        int $limit = -1
+    ): array {
         $query = "SELECT id, title, content, topicID FROM Opinions WHERE topicID = :topicID";
         if ($descending) {
             $query = $query . " ORDER BY id DESC";
@@ -40,9 +43,12 @@ class OpinionRepository extends Repository
         return $this->opinionBuilder($stmt->fetchAll(), $topic);
     }
 
-    public function getOpinionsForTopicByPopularity(Topic $topic, bool $descending,
-                                                    int $offset = -1, int $limit = -1) : array
-    {
+    public function getOpinionsForTopicByPopularity(
+        Topic $topic,
+        bool $descending,
+        int $offset = -1,
+        int $limit = -1
+    ): array {
         $query = "SELECT Opinions.id, Opinions.title, Opinions.content, Opinions.topicID, " .
             "IFNULL(SUM(Reactions.count), 0) as reactions " .
             "FROM Opinions " .
@@ -69,7 +75,7 @@ class OpinionRepository extends Repository
         return $this->opinionBuilder($stmt->fetchAll(), $topic);
     }
 
-    public function insertOpinion(int $topicID, string $title, string $content) : void
+    public function insertOpinion(int $topicID, string $title, string $content): void
     {
         $sql = "INSERT INTO Opinions (title, content, topicID) VALUES (:title, :content, :topicID)";
         $stmt = $this->connection->prepare($sql);
@@ -79,12 +85,30 @@ class OpinionRepository extends Repository
         $stmt->execute();
     }
 
-    public function getOpinionsForTopicCount(Topic $topic) : int
+    public function getOpinionsForTopicCount(Topic $topic): int
     {
         $topicID = $topic->getId();
         $sql = "SELECT COUNT(id) AS opinions FROM Opinions WHERE topicID = $topicID";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetch()["opinions"];
+    }
+
+    public function deleteById(int $id): void
+    {
+        $sql = "DELETE FROM Opinions WHERE id = :id";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    public function update(int $id, string $title, string $content)
+    {
+        $sql = "UPDATE Opinions SET title = :title, content = :content WHERE id = :id";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->bindValue(":title", $title, PDO::PARAM_STR);
+        $stmt->bindValue(":content", $content, PDO::PARAM_STR);
+        $stmt->execute();
     }
 }

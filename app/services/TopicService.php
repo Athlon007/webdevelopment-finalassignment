@@ -18,4 +18,9 @@ class TopicService {
     {
         return $this->repo->getNthTopic($n);
     }
+
+    public function isAnyTopicPresent() : bool
+    {
+        return $this->repo->getCount() > 0;
+    }
 }

@@ -2,7 +2,7 @@
 
 class Router
 {
-    public function route($request) : void
+    public function route($request): void
     {
         $request = explode('?', $request)[0];
         if ($request == "/" || str_starts_with($request, "/home")) {
@@ -32,14 +32,29 @@ class Router
         }
     }
 
-    private function routeAdmin($request) : void
+    private function routeAdmin($request): void
     {
         require("../controllers/AdminController.php");
         $controller = new AdminController();
+
         switch ($request) {
             case "/admin":
             case "/admin/":
+                require_once("../services/LoginService.php");
+                $loginService = new LoginService();
+                if (!$loginService->isSetup()) {
+                    $controller->setup();
+                    return;
+                }
+                if (!$loginService->isLoggedIn()) {
+                    $controller->login();
+                    return;
+                }
                 $controller->index();
+                break;
+            case "/admin/setup-ready":
+            case "/admin/setup-ready/":
+                $controller->setupComplete();
                 break;
             default:
                 $this->route404();
@@ -47,7 +62,7 @@ class Router
         }
     }
 
-    private function route404() : void
+    private function route404(): void
     {
         http_response_code(404);
         require("../views/404.php");

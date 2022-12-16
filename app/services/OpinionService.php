@@ -3,6 +3,7 @@ require_once("../models/Opinion.php");
 require_once("../repositories/OpinionRepository.php");
 require_once("ReactionService.php");
 require_once("SettingsService.php");
+require_once("../models/Exceptions/OpinionAlterException.php");
 
 class OpinionService
 {
@@ -33,7 +34,7 @@ class OpinionService
         return $opinions;
     }
 
-    public function getOpinionsForTopicByPopular(Topic $topic) : array
+    public function getOpinionsForTopicByPopular(Topic $topic): array
     {
         $offset = $this->getPageOffset();
         $limit = $this->getOpinionsLimit();
@@ -51,7 +52,7 @@ class OpinionService
         return $opinions;
     }
 
-    public function insertOpinion(int $topicID, string $title, string $content) : void
+    public function insertOpinion(int $topicID, string $title, string $content): void
     {
         $title = htmlspecialchars($title);
         $content = htmlspecialchars($content);
@@ -60,7 +61,7 @@ class OpinionService
     }
 
     // Returns how many pages are there supposed to be for the specific topic.
-    public function pagesForTopic(Topic $topic) : int
+    public function pagesForTopic(Topic $topic): int
     {
         $settings = $this->settingsService->getSettings();
         return ceil($this->repo->getOpinionsForTopicCount($topic) / $settings->getMaxReactionsPerPage());
@@ -82,5 +83,27 @@ class OpinionService
     {
         $settings = $this->settingsService->getSettings();
         return $settings->getMaxReactionsPerPage();
+    }
+
+    public function deleteById(int $id): void
+    {
+        $id = htmlspecialchars($id);
+        $this->repo->deleteById($id);
+    }
+
+    public function updateById(int $id, string $title, string $content): void
+    {
+        $id = htmlspecialchars($id);
+        $title = htmlspecialchars($title);
+        $content = htmlspecialchars($content);
+
+        if (strlen($title) == 0) {
+            throw new OpinionAlterException("Title cannot be empty.");
+        }
+        if (strlen($content) == 0) {
+            throw new OpinionAlterException("Content cannot be empty.");
+        }
+
+        $this->repo->update($id, $title, $content);
     }
 }

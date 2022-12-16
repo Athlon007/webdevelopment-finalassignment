@@ -35,4 +35,11 @@ class TopicRepository extends Repository
 
         return $this->topicsBuilder($stmt->fetchAll())[0];
     }
+
+    public function getCount() : int
+    {
+        $stmt = $this->connection->prepare("SELECT COUNT(id) as count FROM 'Topics'");
+        $stmt->execute();
+        return $stmt->fetch()["count"];
+    }
 }
