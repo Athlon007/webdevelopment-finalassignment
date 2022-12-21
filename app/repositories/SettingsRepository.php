@@ -2,8 +2,10 @@
 require_once("Repository.php");
 require_once("../models/Settings.php");
 
-class SettingsRepository extends Repository {
-    public function getSettings() : Settings {
+class SettingsRepository extends Repository
+{
+    public function getSettings(): Settings
+    {
         require_once("../services/TopicService.php");
         $stmt = $this->connection->prepare("SELECT * FROM Settings LIMIT 1");
         $stmt->execute();
@@ -12,7 +14,7 @@ class SettingsRepository extends Repository {
 
         while ($row = $stmt->fetch()) {
             $selectedNthTopic = $topicService->getNthTopic($row["selectedNthTopic"]);
-            $dateLastTopicSelected = $row["dateLastTopicSelected"];
+            $dateLastTopicSelected = DateTime::createFromFormat("Y-m-d", $row["dateLastTopicSelected"]);
             $hideOpinionsWithNReports = $row["hideOpinionsWithNReports"];
             $maxReactionsPerPage = $row["maxReactionsPerPage"];
         }
@@ -23,5 +25,20 @@ class SettingsRepository extends Repository {
             $hideOpinionsWithNReports,
             $maxReactionsPerPage
         );
+    }
+
+    public function getSelectedNthTopic(): int
+    {
+        $stmt = $this->connection->prepare("SELECT selectedNthTopic FROM Settings LIMIT 1");
+        $stmt->execute();
+        return $stmt->fetch()["selectedNthTopic"];
+    }
+
+    public function setSelectedNthTopic(int $id, string $today): void
+    {
+        $stmt = $this->connection->prepare("UPDATE Settings SET selectedNthTopic = :id, dateLastTopicSelected = :today");
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->bindValue("today", $today);
+        $stmt->execute();
     }
 }

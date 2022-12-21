@@ -4,25 +4,31 @@ require_once("../services/OpinionService.php");
 require_once("../models/Exceptions/NotLoggedInException.php");
 class AdminController
 {
-    public function index()
-    {
-        $service = new LoginService();
-        $activeUser = $service->getCurrentlyLoggedInUser();
+    private LoginService $loginService;
+    private Account $activeUser;
 
+    public function __construct()
+    {
+        $this->loginService = new LoginService();
+
+        try {
+            $this->activeUser = $this->loginService->getCurrentlyLoggedInUser();
+        } catch (SessionFailException $ex) {
+            $this->login();
+        }
+    }
+
+    public function opinionsPanel()
+    {
         $warnings = "";
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["action"])) {
-            if (!$service->isLoggedIn()) {
+            if (!$this->loginService->isLoggedIn()) {
                 echo "Cannot perform operation, if not logged in!";
             }
 
             try {
                 switch ($_POST["action"]) {
-                    case "logout":
-                        $service->logout();
-                        header("Location: /admin");
-                        die();
-                        break;
                     case "delete-opinion":
                         if (isset($_POST["opinion-id"])) {
                             $opinionService = new OpinionService();
@@ -38,13 +44,18 @@ class AdminController
                             $warnings .= "Title and/or content is missing.";
                         } else {
                             $opinionService = new OpinionService();
-                            $opinionService->updateById($_POST["opinion-id"], $_POST["title"], $_POST["content"]);
+                            $opinionService->updateById($_POST["opinion-id"], $_POST["title"], $_POST["content"], $this->activeUser);
                             header("Location: /admin");
                             die();
                         }
                         break;
+                    default:
+                        $this->globalActions();
+                        break;
                 }
             } catch (OpinionAlterException $ex) {
+                $warnings .= $ex->getMessage();
+            } catch (IllegalOperationException $ex) {
                 $warnings .= $ex->getMessage();
             }
         }
@@ -56,7 +67,7 @@ class AdminController
         }
 
         $currentTopic = -1;
-        if ($mode == "opinions" && isset($_GET) && isset($_GET["topic"])) {
+        if ($mode == "opinions" && isset($_GET) && isset($_GET["topic"]) && strlen($_GET["topic"]) > 0) {
             $currentTopic = $_GET["topic"];
         }
 
@@ -64,18 +75,28 @@ class AdminController
         $topicService = new TopicService();
         $topics = $topicService->getAll();
 
+        require_once("../services/SettingsService.php");
+        $settingService = new SettingsService();
+        $settings = $settingService->getSettings();
         $topic = null;
-        if ($currentTopic == -1) {
-            require_once("../services/SettingsService.php");
-            $settingService = new SettingsService();
-            $settings = $settingService->getSettings();
-            $topic = $settings->getSelectedTopic();
-        } else {
-            // TODO
+        try {
+            if ($currentTopic == -1) {
+                $topic = $settings->getSelectedTopic();
+                $currentTopic = $topic->getId();
+            } else {
+                $topic = $topicService->getTopicById($currentTopic);
+            }
+        } catch (IllegalOperationException $ex) {
+            $warnings .= $ex->getMessage();
         }
-        $opinionService = new OpinionService();
-        $opinions = $opinionService->getOpinionsForTopicByNew($topic);
 
+        $opinions = array();
+        if ($topic != null) {
+            $opinionService = new OpinionService();
+            $opinions = $opinionService->getOpinionsForTopicByNew($topic);
+        }
+
+        $activeUser = $this->activeUser;
         require("../views/admin/panel.php");
     }
 
@@ -98,9 +119,8 @@ class AdminController
             if (strlen($warns) > 0) {
                 $warnings = $warns;
             } else {
-                $service = new LoginService();
                 try {
-                    $service->login($email, $password);
+                    $this->loginService->login($email, $password);
                     header('Location: /admin');
                     die();
                 } catch (AccountNotFoundException $ex) {
@@ -114,8 +134,6 @@ class AdminController
 
     public function setup()
     {
-        $service = new LoginService();
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $warns = "";
             if (!isset($_POST['username'])) {
@@ -142,10 +160,10 @@ class AdminController
                 $confirmPassword = $_POST["confirm-password"];
             }
 
-            if (!$service->isPasswordValid($password)) {
+            if (!$this->loginService->isPasswordValid($password)) {
                 $warns .= "Password does not meet the criteria!<br>";
             }
-            if (!$service->doPasswordsMatch($password, $confirmPassword)) {
+            if (!$this->loginService->doPasswordsMatch($password, $confirmPassword)) {
                 $warns .= "Passwords do not match!<br>";
             }
 
@@ -171,5 +189,69 @@ class AdminController
     public function setupComplete()
     {
         require("../views/admin/setup-ready.php");
+    }
+
+    public function topicsPanel()
+    {
+        $warnings = "";
+
+        require_once("../services/TopicService.php");
+        $topicService = new TopicService();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["action"])) {
+            if (!$this->loginService->isLoggedIn()) {
+                echo "Cannot perform operation, if not logged in!";
+            }
+
+            try {
+                switch ($_POST["action"]) {
+                    case "edit-topic":
+                        if (!isset($_POST["topic-id"]) || !isset($_POST["title"])) {
+                            $warnings .= "Topic or title is missing";
+                            break;
+                        }
+                        $topicService->editTopicTitle($_POST["topic-id"], $_POST["title"], $this->activeUser);
+                        break;
+                    case "add-topic":
+                        if (!isset($_POST["title"])) {
+                            $warnings .= "Title is missing.";
+                            break;
+                        }
+                        $topicService->addTopic($_POST["title"]);
+                        break;
+                    case "delete-topic":
+                        if (!isset($_POST['topic-id'])) {
+                            $warnings .= "Topic ID is missing.";
+                            break;
+                        }
+                        $topicService->deleteById($_POST["topic-id"]);
+                        break;
+                    default:
+                        $this->globalActions();
+                        break;
+                }
+            } catch (IllegalOperationException $ex) {
+                $warnings .= $ex->getMessage();
+            }
+        }
+
+        $topics = $topicService->getAll();
+        $activeUser = $this->activeUser;
+
+        require("../views/admin/panel-topics.php");
+    }
+
+    /**
+     * This function handless global actions (such as loging-out).
+     */
+    private function globalActions()
+    {
+        switch ($_POST["action"]) {
+            case "logout":
+                $this->loginService->logout();
+                header("Location: /admin");
+                die();
+                break;
+        }
     }
 }

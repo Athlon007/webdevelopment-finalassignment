@@ -37,20 +37,27 @@ class Router
         require("../controllers/AdminController.php");
         $controller = new AdminController();
 
+        require_once("../services/LoginService.php");
+        $loginService = new LoginService();
+        if (!$loginService->isSetup()) {
+            // Page not setup? Go into first-time-setup page.
+            $controller->setup();
+            return;
+        }
+        if (!$loginService->isLoggedIn()) {
+            // Not logged-in? Require to login first.
+            $controller->login();
+            return;
+        }
+
         switch ($request) {
             case "/admin":
             case "/admin/":
-                require_once("../services/LoginService.php");
-                $loginService = new LoginService();
-                if (!$loginService->isSetup()) {
-                    $controller->setup();
-                    return;
-                }
-                if (!$loginService->isLoggedIn()) {
-                    $controller->login();
-                    return;
-                }
-                $controller->index();
+                $controller->opinionsPanel();
+                break;
+            case "/admin/topics":
+            case "/admin/topics/":
+                $controller->topicsPanel();
                 break;
             case "/admin/setup-ready":
             case "/admin/setup-ready/":

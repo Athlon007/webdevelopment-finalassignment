@@ -19,7 +19,7 @@
                 <h1>Login</h1>
                 <form method="POST">
                     <div class="form-group mt-2 mb-2">
-                        <input type="email" class="form-control" name="email" placeholder="Email" value="" required />
+                        <input type="text" class="form-control" name="email" placeholder="E-mail or Username" value="<?= isset($_POST["email"]) ? $_POST["email"] : "" ?>" required />
                     </div>
                     <div class="form-group mb-2">
                         <input type="password" class="form-control" name="password" placeholder="Password" value="" required />
@@ -31,10 +31,12 @@
                         <a href="#">Forgot Password?</a>
                     </div>
                     <div class="form-group mb-2">
-                        <p class="text-danger" id="warnings"><?php
-                                                                if (isset($warnings)) {
-                                                                    echo $warnings;
-                                                                } ?></p>
+                        <p class="text-danger" id="warnings">
+                            <?php
+                            if (isset($warnings)) {
+                                echo $warnings;
+                            } ?>
+                        </p>
                     </div>
                 </form>
             </div>

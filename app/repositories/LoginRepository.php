@@ -13,7 +13,7 @@ class LoginRepository extends Repository
 
     public function getRowsCountForEmail(string $email): int
     {
-        $stmt = $this->connection->prepare("SELECT COUNT(id) AS count FROM Accounts WHERE email = :email");
+        $stmt = $this->connection->prepare("SELECT COUNT(id) AS count FROM Accounts WHERE email = :email OR username = :email;");
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetch()["count"];
@@ -71,9 +71,9 @@ class LoginRepository extends Repository
         return $output;
     }
 
-    public function getAccountByEmail(string $email): Account
+    public function getAccountByEmailOrUsername(string $email): Account
     {
-        $query = "SELECT id, username, email, passwordHash, salt, accountType FROM Accounts WHERE email = :email;";
+        $query = "SELECT id, username, email, passwordHash, salt, accountType FROM Accounts WHERE email = :email OR username = :email;";
         $stmt = $this->connection->prepare($query);
         $stmt->bindParam(":email", $email);
         $stmt->execute();

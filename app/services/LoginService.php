@@ -158,10 +158,10 @@ class LoginService
         $email = htmlspecialchars($email);
 
         if (!$this->doesEmailExist($email)) {
-            throw new AccountNotFoundException("An e-mail, and/or passwor do not match.");
+            throw new AccountNotFoundException("An e-mail, and/or password do not match.");
         }
 
-        return $this->repo->getAccountByEmail($email);
+        return $this->repo->getAccountByEmailOrUsername($email);
     }
 
     /**
@@ -175,7 +175,6 @@ class LoginService
     {
         $email = htmlspecialchars($email);
         $password = htmlspecialchars($password);
-
         $account = $this->getUserByEmail($email);
         if (!$this->verifyPassword($password, $account->getSalt(), $account->getPasswordHash())) {
             throw new AccountNotFoundException("An e-mail, and/or password do not match.");

@@ -9,41 +9,18 @@ function hideModal() {
 $('#confirm-remove-close').click(hideModal);
 $('#modal-btn-no').click(hideModal);
 
-function logout() {
-    formBuilder("post", {
-        "action": "logout"
-    });
-}
 
 function deleteOpinionById(id) {
     document.getElementById("confirm-remove-id").innerHTML = id;
     $('#modal-btn-yes').off('click');
     $('#modal-btn-yes').click(function () {
-        formBuilder("post", {
+        formBuilder("post", "/admin", {
             "action": "delete-opinion",
             "opinion-id": id
         });
     });
 
     $("#confirm-remove").modal('show');
-}
-
-function formBuilder(method, attributes) {
-    let form = $('<form style="display: none"></form>');
-
-    form.attr("method", method);
-    form.attr("action", "/admin");
-
-    for (const [key, value] of Object.entries(attributes)) {
-        let field = $('<input></input>');
-        field.attr("name", key);
-        field.attr("value", value);
-        form.append(field);
-    }
-    // The form needs to be a part of the document in
-    // order for us to be able to submit it.
-    $(document.body).append(form);
-    form.submit();
 }
 
 function startEditorForOpinion(id) {
@@ -58,6 +35,10 @@ function startEditorForOpinion(id) {
     editorTitle.disabled = false;
     editorContent.disabled = false;
     editorSubmit.disabled = false;
+
+    if (isInOneColumnMode()) { // the width where col-md ends.
+        toggleEditorOverlay('editor', true);
+    }
 }
 
 function clearEditor() {
@@ -66,4 +47,6 @@ function clearEditor() {
     editorTitle.disabled = true;
     editorContent.disabled = true;
     editorSubmit.disabled = true;
+
+    toggleEditorOverlay('editor', false);
 }

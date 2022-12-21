@@ -4,6 +4,7 @@ require_once("../repositories/OpinionRepository.php");
 require_once("ReactionService.php");
 require_once("SettingsService.php");
 require_once("../models/Exceptions/OpinionAlterException.php");
+require_once("../models/Exceptions/IllegalOperationException.php");
 
 class OpinionService
 {
@@ -91,8 +92,12 @@ class OpinionService
         $this->repo->deleteById($id);
     }
 
-    public function updateById(int $id, string $title, string $content): void
+    public function updateById(int $id, string $title, string $content, Account $editingUser): void
     {
+        if ($editingUser->getAccountType() != AccountType::Admin) {
+            throw new IllegalOperationException("Only admins can edit opinions!");
+        }
+
         $id = htmlspecialchars($id);
         $title = htmlspecialchars($title);
         $content = htmlspecialchars($content);
