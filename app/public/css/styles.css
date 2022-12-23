@@ -326,6 +326,18 @@ form>textarea {
     justify-items: center;
 }
 
+.dismisable {
+    position: fixed;
+    display: block;
+    min-width: 15rem;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.popup-success {
+    background-color: #daf1d2;
+}
+
 @media screen and (max-width: 834px) {
     h1 {
         margin-top: 0em;

@@ -13,6 +13,15 @@
 </head>
 
 <body>
+    <?php
+    if (isset($_GET["message"])) {
+    ?>
+        <div class="popup dismisable popup-success">
+            <button class="btn-overlay-close">X</button>
+            <header>Alert</header>
+            <main><?= $_GET["message"] ?></main>
+        </div>
+    <?php } ?>
     <section class="overlay" id="input-opinion-panel">
         <section class="overlay-content" id="input-opinion-panel-content">
             <button class="btn-overlay-close">X</button>

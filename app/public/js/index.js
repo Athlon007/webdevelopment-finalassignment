@@ -24,15 +24,18 @@ let allowedSendEntities = ["&#128563;", "&#128561;", "&#129300;", "&#129763;",
 let lastSendEntity = '';
 
 // Find all overlays and add the "close" action to closing button.
-let overlays = document.getElementsByClassName("overlay");
+let overlays = document.querySelectorAll(".overlay,.dismisable");
 for (let overlay of overlays) {
     try {
         let overlayContent = overlay.getElementsByClassName('overlay-content')[0];
-        if (overlayContent == null) {
-            throw new Error("Overlay content is missing");
+
+        var btnClose = null;
+        if (overlayContent != null) {
+            btnClose = overlayContent.getElementsByClassName('btn-overlay-close')[0];
+        } else {
+            btnClose = overlay.getElementsByClassName('btn-overlay-close')[0];
         }
 
-        let btnClose = overlayContent.getElementsByClassName('btn-overlay-close')[0];
         if (btnClose == null) {
             throw new Error('Close Button is missing');
         }

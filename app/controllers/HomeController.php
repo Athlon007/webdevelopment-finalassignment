@@ -1,13 +1,10 @@
 <?php
 class HomeController
 {
-    public function index() : void
+    public function index(): void
     {
-        if ($this->isPosting())
-        {
+        if ($this->isPosting()) {
             $this->handlePost();
-            $this->reload();
-            die();
         }
 
         require_once("../services/SettingsService.php");
@@ -25,8 +22,8 @@ class HomeController
 
         $opinionService = new OpinionService();
         $opinions = $sortby == "popular"
-        ? $opinionService->getOpinionsForTopicByPopular($topic)
-        : $opinionService->getOpinionsForTopicByNew($topic);
+            ? $opinionService->getOpinionsForTopicByPopular($topic)
+            : $opinionService->getOpinionsForTopicByNew($topic);
 
         $currentPage = $this->getCurrentPage();
         $pagesCount = $opinionService->pagesForTopic($topic);
@@ -37,14 +34,18 @@ class HomeController
         require("../views/home/index.php");
     }
 
-    private function isPosting() : bool
+    private function isPosting(): bool
     {
         return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
-    private function reload() : void
+    private function reload($message = ""): void
     {
-        header('Location: /');
+        $str = 'Location: /';
+        if (strlen($message) > 0) {
+            $str .= "?message=$message";
+        }
+        header($str);
         die();
     }
 
@@ -66,6 +67,8 @@ class HomeController
             echo $ex->getMessage() . "<br>";
             echo $ex->getTraceAsString();
         }
+
+        $this->reload("Message sent successfully!");
     }
 
     private function reactToOpinion()
