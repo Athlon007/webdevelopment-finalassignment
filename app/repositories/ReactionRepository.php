@@ -20,7 +20,7 @@ class ReactionRepository extends Repository
         return $output;
     }
 
-    public function getAllForOpinion(Opinion $opinion) : array
+    public function getAllForOpinion(Opinion $opinion): array
     {
         $stmt = $this->connection->prepare("SELECT id, reactionID, 'name', opinionID, count FROM Reactions WHERE opinionID = :opinionID");
         $opinionID = $opinion->getId();
@@ -29,7 +29,7 @@ class ReactionRepository extends Repository
         return $this->reactionBuilder($stmt->fetchAll(), $opinion);
     }
 
-    public function createNewReaction(int $opinionID, int $reactionID) : void
+    public function createNewReaction(int $opinionID, int $reactionID): void
     {
         $sql = "INSERT INTO Reactions (reactionID, opinionID, count) VALUES (:reactionID, :opinionID, 1)";
         $stmt = $this->connection->prepare($sql);
@@ -38,7 +38,7 @@ class ReactionRepository extends Repository
         $stmt->execute();
     }
 
-    public function increaseCountOfExistingOpinion(int $opinionID, int $reactionID) : void
+    public function increaseCountOfExistingOpinion(int $opinionID, int $reactionID): void
     {
         $sql = "UPDATE Reactions SET count = count + 1 WHERE opinionID = :opinionID AND reactionID = :reactionID";
         $stmt = $this->connection->prepare($sql);
@@ -48,10 +48,10 @@ class ReactionRepository extends Repository
     }
 
     // Returns number of specific reactions for specific opinion.
-    public function getReactionCount(int $opinionID, int $reactionID) : int
+    public function getReactionCount(int $opinionID, int $reactionID): int
     {
         $sql = "SELECT count(id) AS reactionCount FROM Reactions " .
-                "WHERE opinionID = :opinionID AND reactionID = :reactionID";
+            "WHERE opinionID = :opinionID AND reactionID = :reactionID";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(":reactionID", $reactionID, PDO::PARAM_INT);
         $stmt->bindParam(":opinionID", $opinionID, PDO::PARAM_INT);
@@ -59,10 +59,10 @@ class ReactionRepository extends Repository
         return $stmt->fetch()["reactionCount"];
     }
 
-    public function getReactionsCount(int $opinionID) : int
+    public function getReactionsCount(int $opinionID): int
     {
         $sql = "SELECT IFNULL(SUM(Reactions.count), 0) as reactionCount FROM Opinions " .
-        "LEFT JOIN Reactions on Reactions.opinionID = Opinions.id WHERE Opinions.id = :opinionID;";
+            "LEFT JOIN Reactions on Reactions.opinionID = Opinions.id WHERE Opinions.id = :opinionID;";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(":opinionID", $opinionID, PDO::PARAM_INT);
         $stmt->execute();

@@ -44,7 +44,7 @@
             <?php
             foreach ($reactionEntites as $reactionEntity) {
             ?>
-                <button class="reaction" onclick="addNewReactionToOpinion(<?= $reactionEntity->getId() ?>)">
+                <button class="reaction emoji" onclick="addNewReactionToOpinion(<?= $reactionEntity->getId() ?>)">
                     <?= $reactionEntity->getHtmlEntity() ?>
                 </button>
             <?php
@@ -86,7 +86,8 @@
         if (count($opinions) == 0) {
         ?>
             <article class="opinion">
-                <header>No topics just yet!</header>
+                <header>No opinions on that topic just yet!<p class="emoji">&#128576;</p>
+                </header>
                 <main>Time to create a new one?</main>
             </article>
             <?php

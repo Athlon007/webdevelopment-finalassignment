@@ -56,19 +56,16 @@ class HomeController
                 require_once("../services/OpinionService.php");
                 $opinionService = new OpinionService();
                 $opinionService->insertOpinion($_POST["topicID"], $_POST["title"], $_POST["content"]);
+                $this->reload("Message sent succesfully!");
             } elseif (isset($_POST["actionType"])) {
                 $this->reactToOpinion();
+                $this->reload("Reaction added!");
             } else {
                 throw new ErrorException("Something went wrong while posting a new opinion");
             }
         } catch (Exception $ex) {
-            # TODO: Improve that bit.
-            print_r($_POST);
-            echo $ex->getMessage() . "<br>";
-            echo $ex->getTraceAsString();
+            $this->reload($ex->getMessage());
         }
-
-        $this->reload("Message sent successfully!");
     }
 
     private function reactToOpinion()

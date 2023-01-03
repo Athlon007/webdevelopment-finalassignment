@@ -14,13 +14,13 @@ class ReactionService
     }
 
     // Returns the list of all reactions for provided opinion.
-    public function getAllForOpinion(Opinion $opinion) : array
+    public function getAllForOpinion(Opinion $opinion): array
     {
         return $this->repo->getAllForOpinion($opinion);
     }
 
     // Returns true, if opinion has 1 or more reactions.
-    private function isReactionForOpinionPresent(int $opinionID, int $reactionID) : bool
+    private function isReactionForOpinionPresent(int $opinionID, int $reactionID): bool
     {
         return $this->repo->getReactionCount($opinionID, $reactionID) > 0;
     }

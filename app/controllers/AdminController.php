@@ -211,6 +211,8 @@ class AdminController
                             break;
                         }
                         $topicService->editTopicTitle($_POST["topic-id"], $_POST["title"], $this->activeUser);
+                        header("Location: /admin/topics");
+                        die();
                         break;
                     case "add-topic":
                         if (!isset($_POST["title"])) {
@@ -218,6 +220,8 @@ class AdminController
                             break;
                         }
                         $topicService->addTopic($_POST["title"]);
+                        header("Location: /admin/topics");
+                        die();
                         break;
                     case "delete-topic":
                         if (!isset($_POST['topic-id'])) {
@@ -225,6 +229,8 @@ class AdminController
                             break;
                         }
                         $topicService->deleteById($_POST["topic-id"]);
+                        header("Location: /admin/topics");
+                        die();
                         break;
                     default:
                         $this->globalActions();
@@ -253,5 +259,61 @@ class AdminController
                 die();
                 break;
         }
+    }
+
+    public function reactionsPanel()
+    {
+        require_once("../services/ReactionEntityService.php");
+        $reactionService = new ReactionEntityService();
+
+        $warnings = "";
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["action"])) {
+            if (!$this->loginService->isLoggedIn()) {
+                echo "Cannot perform operation, if not logged in!";
+            }
+
+            try {
+                switch ($_POST["action"]) {
+                    case "edit-reaction":
+                        if (!isset($_POST["reaction-id"]) || !isset($_POST["emoji"])) {
+                            $warnings .= "Emoji or 'Is Negative' is missing";
+                            break;
+                        }
+                        $reactionService->editReaction($_POST["reaction-id"], $_POST["emoji"], isset($_POST["isNegative"]));
+                        header("Location: /admin/reactions");
+                        die();
+                        break;
+                    case "add-reaction":
+                        if (!isset($_POST["emoji"])) {
+                            $warnings .= "Emoji or 'Is Negative' is missing.";
+                            break;
+                        }
+                        $reactionService->addReaction($_POST["emoji"], isset($_POST["isNegative"]));
+                        header("Location: /admin/reactions");
+                        die();
+                        break;
+                    case "delete-reaction":
+                        if (!isset($_POST['reaction-id'])) {
+                            $warnings .= "Reaction ID is missing.";
+                            break;
+                        }
+                        $reactionService->deleteReaction($_POST["reaction-id"]);
+                        break;
+                    default:
+                        $this->globalActions();
+                        break;
+                }
+            } catch (IllegalOperationException $ex) {
+                $warnings .= $ex->getMessage();
+            } catch (PDOException $ex) {
+                $warnings .= "Cannot delete already used reactions.";
+            }
+        }
+
+        $reactions = $reactionService->getAll();
+
+        $activeUser = $this->activeUser;
+        require("../views/admin/panel-reactions.php");
     }
 }
