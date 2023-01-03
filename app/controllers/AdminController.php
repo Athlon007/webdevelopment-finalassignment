@@ -264,6 +264,11 @@ class AdminController
 
     public function reactionsPanel()
     {
+        if ($this->activeUser->getAccountType() == AccountType::Moderator) {
+            header("Location: /admin");
+            die();
+        }
+
         require_once("../services/ReactionEntityService.php");
         $reactionService = new ReactionEntityService();
 
@@ -300,6 +305,8 @@ class AdminController
                             break;
                         }
                         $reactionService->deleteReaction($_POST["reaction-id"]);
+                        header("Location: /admin/reactions");
+                        die();
                         break;
                     default:
                         $this->globalActions();
@@ -316,5 +323,101 @@ class AdminController
 
         $activeUser = $this->activeUser;
         require("../views/admin/panel-reactions.php");
+    }
+
+    public function usersPanel()
+    {
+        if ($this->activeUser->getAccountType() == AccountType::Moderator) {
+            header("Location: /admin");
+            die();
+        }
+
+        require_once("../services/LoginService.php");
+        $loginService = new LoginService();
+        $accounts = $loginService->getAll();
+        $warnings = "";
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["action"])) {
+            if (!$this->loginService->isLoggedIn()) {
+                echo "Cannot perform operation, if not logged in!";
+            }
+
+            try {
+                switch ($_POST["action"]) {
+                    case "edit-account":
+                        if (!isset($_POST["username"]) || strlen($_POST["username"]) == 0) {
+                            $warnings .= "Username is missing\n";
+                        }
+                        if (!isset($_POST["email"]) || strlen($_POST["email"]) == 0) {
+                            $warnings .= "Email is missing\n";
+                        }
+
+                        if (!isset($_POST["type"]) || strlen($_POST["type"]) == 0) {
+                            $warnings .= "Type is missing\n";
+                        }
+
+                        if (strlen($warnings) > 0) {
+                            break;
+                        }
+
+                        $accountType = AccountType::getByString($_POST["type"]);
+                        $loginService->editAccount($_POST["account-id"], $_POST["username"], $_POST["email"], $accountType);
+
+                        if (isset($_POST["password"]) && strlen($_POST["password"]) > 0) {
+                            $loginService->updatePassword($_POST["account-id"], $_POST["password"]);
+                        }
+
+                        header("Location: /admin/users");
+                        die();
+                        break;
+                    case "add-account":
+                        if (!isset($_POST["username"]) || strlen($_POST["username"]) == 0) {
+                            $warnings .= "Username is missing\n";
+                        }
+                        if (!isset($_POST["email"]) || strlen($_POST["email"]) == 0) {
+                            $warnings .= "Email is missing\n";
+                        }
+
+                        if (!isset($_POST["password"]) || strlen($_POST["password"]) == 0) {
+                            $warnings .= "Password is missing\n";
+                        }
+
+                        if (!isset($_POST["type"]) || strlen($_POST["type"]) == 0) {
+                            $warnings .= "Type is missing\n";
+                        }
+
+                        if (strlen($warnings) > 0) {
+                            break;
+                        }
+
+                        $accountType = AccountType::getByString($_POST["type"]);
+                        $loginService->createAccount($_POST["username"], $_POST["email"], $_POST["password"], $accountType);
+                        header("Location: /admin/users");
+                        die();
+                        break;
+                    case "delete-account":
+                        if (!isset($_POST['account-id'])) {
+                            $warnings .= "Account ID is missing.";
+                            break;
+                        }
+                        $loginService->deleteAccount($_POST["account-id"]);
+                        header("Location: /admin/users");
+                        die();
+                        break;
+                    default:
+                        $this->globalActions();
+                        break;
+                }
+            } catch (IllegalOperationException $ex) {
+                $warnings .= $ex->getMessage();
+            } catch (PDOException $ex) {
+                $warnings .= $ex->getMessage();
+            }
+        }
+
+        $accountTypes = AccountType::cases();
+
+        $activeUser = $this->activeUser;
+        require("../views/admin/panel-users.php");
     }
 }

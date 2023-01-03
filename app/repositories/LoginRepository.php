@@ -96,4 +96,35 @@ class LoginRepository extends Repository
         $stmt->execute();
         return $this->accountsBuilder($stmt->fetchAll())[0];
     }
+
+    public function updateAccount(int $id, string $username, string $email, AccountType $accountType): void
+    {
+        $query = "UPDATE Accounts SET username = :username, email = :email, accountType = :accountType WHERE id = :id";
+        $stmt = $this->connection->prepare($query);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":username", $username, PDO::PARAM_STR);
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+
+        $accountTypeNumber = $accountType->value;
+        $stmt->bindParam(":accountType", $accountTypeNumber, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    public function updatePassword(int $id, string $passwordHash, string $salt): void
+    {
+        $sql = "UPDATE Accounts SET passwordHash = :passwordHash, salt = :salt WHERE id = :id";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(":passwordHash", $passwordHash, PDO::PARAM_STR);
+        $stmt->bindParam(":salt", $salt, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    public function delete(int $id): void
+    {
+        $sql = "DELETE FROM Accounts WHERE id = :id";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
 }

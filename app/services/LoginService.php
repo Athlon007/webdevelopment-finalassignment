@@ -225,4 +225,50 @@ class LoginService
 
         return $this->repo->getAccountById($_SESSION["user_id"]);
     }
+
+    /**
+     * Returns all users.
+     * @return Array Array of all Accounts.
+     */
+    public function getAll(): array
+    {
+        return $this->repo->getAll();
+    }
+
+    /**
+     * Updates the account details (except for the password).
+     */
+    public function editAccount(int $id, string $username, string $email, AccountType $type): void
+    {
+        $id = htmlspecialchars($id);
+        $username = htmlspecialchars($username);
+        $email = htmlspecialchars($email);
+
+        $this->repo->updateAccount($id, $username, $email, $type);
+    }
+
+    /**
+     * Updates the password of an account.
+     */
+    public function updatePassword(int $id, string $password): void
+    {
+        if (!$this->isPasswordValid($password)) {
+            throw new IllegalOperationException("Password does not meet the criteria!");
+        }
+
+        $id = htmlspecialchars($id);
+        $password = htmlspecialchars($password);
+        $salt = htmlspecialchars($this->generateSalt());
+        $hash = htmlspecialchars($this->generatePasswordHash($password, $salt));
+        $this->repo->updatePassword($id, $hash, $salt);
+    }
+
+    /**
+     * Removes the account by ID.
+     */
+    public function deleteAccount(int $id): void
+    {
+        $id = htmlspecialchars($id);
+        $this->repo->delete($id);
+    }
 }

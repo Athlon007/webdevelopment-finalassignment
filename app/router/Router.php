@@ -63,6 +63,10 @@ class Router
             case "/admin/reactions/":
                 $controller->reactionsPanel();
                 break;
+            case "/admin/users":
+            case "/admin/users/":
+                $controller->usersPanel();
+                break;
             case "/admin/setup-ready":
             case "/admin/setup-ready/":
                 $controller->setupComplete();

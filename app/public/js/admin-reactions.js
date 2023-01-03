@@ -23,7 +23,7 @@ $('#btn-cancel-edit').click(function () {
     document.getElementById('reaction-id').value = -1;
     btnEdit.disabled = true;
     editorTitle.disabled = true;
-    editorIsNegative.checked = false;
+    editorIsNegative.disabled = true;
 
     toggleEditorOverlay('editor', false);
 });

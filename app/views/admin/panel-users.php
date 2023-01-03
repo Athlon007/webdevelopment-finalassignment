@@ -24,7 +24,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="d-inline">Are you sure you want to delete the reaction ID
+                    <p class="d-inline">Are you sure you want to delete the user ID
                     <p id="confirm-remove-id" class="font-weight-bold d-inline">-1</p>?</p>
                     <p>This operation is irreversible!</p>
                 </div>
@@ -54,10 +54,10 @@
                         <a class="nav-link" href="/admin/reports">Reports</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Reactions</a>
+                        <a class="nav-link" href="/admin/reactions">Reactions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/users">Users</a>
+                        <a class="nav-link active" href="#">Users</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/config">Config</a>
@@ -90,31 +90,33 @@
         <div class="row mt-2">
             <div class="col-md-8">
                 <div class="card">
-                    <h2>Reactions</h2>
+                    <h2>Users</h2>
                     <div class="m-2">
                         <div class="row align-items-center justify-content-center m-2">
-                            <button class="btn btn-success" id="btn-create-reaction-editor">Add Reaction</button>
+                            <button class="btn btn-success" id="btn-create-editor">Add User</button>
                         </div>
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th class="col-1">ID</th>
-                                    <th>Emoji</th>
-                                    <th class="col-2">Is Negative</th>
+                                    <th>Username</th>
+                                    <th class="col-2">E-Mail</th>
+                                    <th class="col-2">Type</th>
                                     <th class="col-2">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                foreach ($reactions as $reaction) {
+                                foreach ($accounts as $account) {
                                 ?>
-                                    <tr id="reaction-<?= $reaction->getId() ?>">
-                                        <td><?= $reaction->getId() ?></td>
-                                        <td><?= $reaction->getHtmlEntity() ?></td>
-                                        <td><?= $reaction->getIsNegativeOpinion() ? "Yes" : "No" ?></td>
+                                    <tr id="account-<?= $account->getId() ?>">
+                                        <td><?= $account->getID() ?></td>
+                                        <td><?= $account->getUsername() ?></td>
+                                        <td><?= $account->getEmail() ?></td>
+                                        <td><?= $account->getAccountType()->asString() ?></td>
                                         <td>
-                                            <button onclick="startEditorReaction(<?= $reaction->getId() ?>);" class="btn btn-primary m-1 w-100">Edit</button>
-                                            <button onclick="deleteReactionById(<?= $reaction->getId() ?>);" class="btn btn-danger m-1 w-100">Delete</button>
+                                            <button onclick="startEditor(<?= $account->getID() ?>);" class="btn btn-primary m-1 w-100">Edit</button>
+                                            <button onclick="deleteById(<?= $account->getID() ?>);" class="btn btn-danger m-1 w-100">Delete</button>
                                         </td>
                                     </tr>
                                 <?php
@@ -128,15 +130,33 @@
                 <div class="card">
                     <h2>Editor</h2>
                     <form method="POST">
-                        <input type="hidden" id="reaction-action" name="action" value="edit-reaction">
-                        <input type="hidden" id="reaction-id" name="reaction-id" value="">
+                        <input type="hidden" id="action" name="action" value="edit-account">
+                        <input type="hidden" id="account-id" name="account-id" value="">
                         <div class="form-group m-2">
-                            <label class="form-label" for="editor-emoji">Emoji</label>
-                            <input id="editor-emoji" maxlength="1" type="text" class="form-control" name="emoji" disabled>
-                            <div class="form-check">
-                                <input id="editor-is-negative" type="checkbox" class="form-check-input" name="isNegative" disabled>
-                                <label class="form-check-label" for="editor-is-negative">Is Negative</label>
+                            <div class="form-group">
+                                <label for="editor-username">Username</label>
+                                <input id="editor-username" maxlength="128" type="text" class="form-control" name="username" disabled required>
                             </div>
+                            <div class="form-group">
+                                <label for="editor-email">E-Mail</label>
+                                <input id="editor-email" class="form-control" type="email" name="email" disabled required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editor-password">Password</label>
+                                <input id="editor-password" type="password" class="form-control" name="password" disabled>
+                                <small class="form-text text-muted">Leave empty, if you don't want to change it.</small>
+                            </div>
+                            <label for="editor-type">Type</label>
+                            <select id="editor-type" name="type" class="form-select" disabled required>
+                                <option disabled selected value> -- Select an option -- </option>
+                                <?php
+                                foreach ($accountTypes as $accountType) {
+                                ?>
+                                    <option value="<?= $accountType->asString() ?>"><?= $accountType->asString() ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group mt-4 m-2">
                             <input id="btn-edit" class="btn btn-primary" type="submit" value="Update" disabled>
@@ -150,7 +170,7 @@
     <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="application/javascript" src="/js/admin-global.js"></script>
-    <script type="application/javascript" src="/js/admin-reactions.js"></script>
+    <script type="application/javascript" src="/js/admin-users.js"></script>
 </body>
 
 </html>

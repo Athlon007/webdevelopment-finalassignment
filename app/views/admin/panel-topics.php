@@ -50,18 +50,20 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Topics</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/reports">Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/reactions">Reactions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/users">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/config">Config</a>
-                    </li>
+                    <?php if ($activeUser->getAccountType() == AccountType::Admin) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/reports">Reports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/reactions">Reactions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/users">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/config">Config</a>
+                        </li>
+                    <?php } ?>
 
                 </ul>
                 <ul class="navbar-nav">
