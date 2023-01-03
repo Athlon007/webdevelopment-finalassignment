@@ -2,6 +2,7 @@
 require_once("../services/LoginService.php");
 require_once("../services/OpinionService.php");
 require_once("../models/Exceptions/NotLoggedInException.php");
+
 class AdminController
 {
     private LoginService $loginService;
