@@ -178,3 +178,87 @@ function changePage(pageNumber) {
 
     form.submit();
 }
+
+let reportPanel = document.getElementById('input-report-panel');
+let reportTypes = document.getElementById('report-types');
+let warningReport = document.getElementById('warning-report');
+let btnSubmitReport = document.getElementById('btn-submit-report');
+
+function showReport(opinionID) {
+    reportPanel.style.display = 'block';
+    warningReport.style.display = 'none';
+    btnSubmitReport.disabled = false;
+
+    // Unselect all options.
+    for (let i = 0; i < reportTypes.childElementCount; ++i) {
+        reportTypes.children[i].children[0].checked = false;
+    }
+
+
+    btnSubmitReport.onclick = function () {
+        btnSubmitReport.disabled = true;
+        // Get selected item.
+        let selected = -1;
+        for (let i = 0; i < reportTypes.childElementCount; ++i) {
+            if (reportTypes.children[i].children[0].checked) {
+                selected = i;
+                break;
+            }
+        }
+
+        // None selected? Show warning.
+        if (selected == -1) {
+            warningReport.innerHTML = "Select report type first.";
+            warningReport.style.display = 'block';
+            return;
+        }
+
+        let data = {
+            'opinion_id': opinionID,
+            'report_type': selected
+        };
+
+        let response;
+        fetch('/api/report-opinion', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(data => { response = data; })
+            .then(() => {
+                if (response.error_message != null) {
+                    // Something went wrong.
+                    warningReport.innerHTML = "Something went wrong while reporting the opinion:<br>" + response.error_message;
+                    warningReport.style.display = 'block';
+                } else {
+                    createAlert(response.message);
+                    reportPanel.style.display = 'none';
+                }
+            });
+    }
+}
+
+function createAlert(mainText) {
+    let popup = document.createElement('div');
+    popup.classList.add('popup');
+    popup.classList.add('dismisable');
+    popup.classList.add('popup-success');
+
+    let buttonClose = document.createElement('button');
+    buttonClose.classList.add('btn-overlay-close');
+    buttonClose.innerHTML = 'X';
+    buttonClose.onclick = function () {
+        popup.remove();
+    };
+    popup.appendChild(buttonClose);
+
+    let header = document.createElement('header');
+    header.innerHTML = 'Alert';
+    popup.appendChild(header);
+
+    let main = document.createElement('main');
+    main.innerHTML = mainText;
+    popup.appendChild(main);
+
+    document.body.prepend(popup);
+}

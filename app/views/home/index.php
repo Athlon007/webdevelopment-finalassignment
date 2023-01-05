@@ -27,15 +27,37 @@
             <button class="btn-overlay-close">X</button>
             <h2>Submit</h2>
             <form method="POST">
-                <label for="title">Title</label>
+                <label for="title-input">Title</label>
                 <input type="text" name="title" id="title-input" oninput="validateTitleInput();" maxlength="32" required>
                 <label class="input-char-counter" id="title-char-counter">0/0</label>
-                <label for="content">What are your thoughts?</label>
+                <label for="content-input">What are your thoughts?</label>
                 <textarea name="content" id="content-input" required maxlength="512" oninput="validateContentInput();"></textarea>
                 <label class="input-char-counter" id="content-char-counter">0/0</label>
                 <input type="hidden" name="topicID" value="<?= $topic->getId() ?>" />
                 <input id="btn-submit-opinion" class="emoji" type="submit" value="Send!">
             </form>
+        </section>
+    </section>
+    <section class="overlay" id="input-report-panel">
+        <section class="overlay-content" id="input-opinion-panel-content">
+            <button class="btn-overlay-close">X</button>
+            <h2>Report abuse</h2>
+            <form method="POST">
+                <div class="radio-block" id="report-types">
+                    <?php
+                    foreach ($reportTypes as $reportType) {
+                    ?>
+                        <label>
+                            <input type="radio" id="report-type-<?= $reportType->value ?>" name="reportType" value="<?= $reportType->value ?>" />
+                            <?= $reportType->asString() ?>
+                        </label>
+                    <?php
+                    } ?>
+                </div>
+                <input id="btn-submit-report" type="button" value="Report">
+            </form>
+            <p id="warning-report" class="warning">Warning</p>
+            <p id="success-report" class="success">Warning</p>
         </section>
     </section>
     <section class="popup" id="reaction-panel">
@@ -110,7 +132,7 @@
                         <?php } ?>
                         <button class="reaction btn-secondary" id="button-add-reaction-<?= $opinion->getId() ?>" onclick="showReactionPanel(<?= $opinion->getId() ?>);">+</button>
                     </section>
-                    <a class="report-issue">Report...</a>
+                    <a class="report-issue" onclick="showReport(<?= $opinion->getId() ?>);">Report...</a>
                 </article>
         <?php }
         } ?>

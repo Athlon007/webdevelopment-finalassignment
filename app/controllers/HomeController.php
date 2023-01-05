@@ -10,6 +10,7 @@ class HomeController
         require_once("../services/SettingsService.php");
         require_once("../services/OpinionService.php");
         require_once("../services/ReactionEntityService.php");
+        require_once("../models/ReportType.php");
 
         $sortby = "popular";
         if (isset($_GET) && isset($_GET["sortby"]) && $_GET["sortby"] == "new") {
@@ -30,6 +31,8 @@ class HomeController
 
         $reactionEntityService = new ReactionEntityService();
         $reactionEntites = $reactionEntityService->getAll();
+
+        $reportTypes = ReportType::cases();
 
         require("../views/home/index.php");
     }

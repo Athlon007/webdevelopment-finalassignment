@@ -111,4 +111,11 @@ class OpinionService
 
         $this->repo->update($id, $title, $content);
     }
+
+    public function getOpinionById(int $id): Opinion
+    {
+        $id = htmlspecialchars($id);
+        $opinion = $this->repo->selectById($id);
+        return $opinion;
+    }
 }

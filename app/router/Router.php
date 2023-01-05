@@ -9,6 +9,8 @@ class Router
             $this->routeHome($request);
         } elseif (str_starts_with($request, "/admin")) {
             $this->routeAdmin($request);
+        } elseif (str_starts_with($request, '/api')) {
+            $this->routeApi($request);
         } else {
             $this->route404();
         }
@@ -81,5 +83,16 @@ class Router
     {
         http_response_code(404);
         require("../views/404.php");
+    }
+
+    private function routeApi($request): void
+    {
+        require("../controllers/ApiController.php");
+        $controller = new ApiController();
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $controller->post($request);
+        } else {
+            $controller->error("Unsupported method.");
+        }
     }
 }
