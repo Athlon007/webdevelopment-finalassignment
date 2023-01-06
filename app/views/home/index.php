@@ -14,6 +14,12 @@
 
 <body>
     <?php
+    if ($topic == null) {
+        echo "<h1>Oi', Admin!</h1>";
+        echo "<h2>Set the damn page first!</h2>";
+        echo "<button style='width: 100%' onclick='window.location.href = `/admin/topics`'>Go to admin panel</button>";
+        return;
+    }
     if (isset($_GET["message"])) {
     ?>
         <div class="popup dismisable popup-success">
@@ -152,9 +158,10 @@
                 <a href="/404">404</a>
             </li>
             <li>
-                <a href="/admin">Admin</a>
+                <a href="/admin">Admin Login</a>
             </li>
         </ul>
+        <hr>
         <p>
             Copyright &copy; 2022 <a href="http://kfigura.nl">Konrad Figura</a>
         </p>

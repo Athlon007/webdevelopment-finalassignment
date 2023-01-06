@@ -83,7 +83,9 @@ class AdminController
         try {
             if ($currentTopic == -1) {
                 $topic = $settings->getSelectedTopic();
-                $currentTopic = $topic->getId();
+                if ($topic != null) {
+                    $currentTopic = $topic->getId();
+                }
             } else {
                 $topic = $topicService->getTopicById($currentTopic);
             }
@@ -194,6 +196,10 @@ class AdminController
 
     public function topicsPanel()
     {
+        if ($this->activeUser->getAccountType() == AccountType::Moderator) {
+            header("Location: /admin");
+            die();
+        }
         $warnings = "";
 
         require_once("../services/TopicService.php");
@@ -482,5 +488,21 @@ class AdminController
 
         $activeUser = $this->activeUser;
         require("../views/admin/panel-reports.php");
+    }
+
+    public function configPanel()
+    {
+        if ($this->activeUser->getAccountType() == AccountType::Moderator) {
+            header("Location: /admin");
+            die();
+        }
+        $warnings = '';
+
+        require_once("../services/SettingsService.php");
+        $settingsService = new SettingsService();
+        $settings = $settingsService->getSettings();
+
+        $activeUser = $this->activeUser;
+        require("../views/admin/panel-config.php");
     }
 }

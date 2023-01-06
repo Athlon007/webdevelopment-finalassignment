@@ -47,22 +47,22 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/admin">Opinions</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/topics">Topics</a>
-                    </li>
+                    <?php if ($activeUser->getAccountType() == AccountType::Admin) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/topics">Topics</a>
+                        </li>
+                    <?php } ?>
                     <li class="nav-item">
                         <a class="nav-link active" href="#">Reports</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/reactions">Reactions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/users">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/config">Config</a>
-                    </li>
-
+                    <?php if ($activeUser->getAccountType() == AccountType::Admin) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/reactions">Reactions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/users">Users</a>
+                        </li>
+                    <?php } ?>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
@@ -70,7 +70,6 @@
                             &#91;<?= $activeUser->getID() ?>, <?= $activeUser->getAccountType()->name ?>&#93; <?= $activeUser->getUsername(); ?>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" id="btn-settings">Settings</a></li>
                             <li><a class="dropdown-item" id="btn-logout">Logout</a></li>
                         </ul>
                     </li>

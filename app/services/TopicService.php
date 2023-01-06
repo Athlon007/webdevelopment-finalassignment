@@ -15,7 +15,7 @@ class TopicService
         return $this->repo->getAll();
     }
 
-    public function getNthTopic($n): Topic
+    public function getNthTopic($n): ?Topic
     {
         return $this->repo->getNthTopic($n);
     }

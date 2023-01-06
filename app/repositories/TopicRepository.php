@@ -25,13 +25,18 @@ class TopicRepository extends Repository
         return $this->topicsBuilder($stmt->fetchAll());
     }
 
-    public function getNthTopic(int $n): Topic
+    public function getNthTopic(int $n): ?Topic
     {
         $stmt = $this->connection->prepare("SELECT id, name FROM `Topics` ORDER BY id LIMIT :n,1;");
         $stmt->bindParam(":n", $n, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $this->topicsBuilder($stmt->fetchAll())[0];
+        $value = $stmt->fetchAll();
+        if (count($value) == 0) {
+            return null;
+        }
+
+        return $this->topicsBuilder($value)[0];
     }
 
     public function getCount(): int

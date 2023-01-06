@@ -26,7 +26,7 @@
                 <div class="modal-body">
                     <p class="d-inline">Are you sure you want to delete the topic ID
                     <p id="confirm-remove-id" class="font-weight-bold d-inline">-1</p>?</p>
-                    <p>This operation is irreversible!</p>
+                    <p>This operation is irreversible and ALL opinions will be lost!</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="modal-btn-yes">Yes</button>
@@ -60,9 +60,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/admin/users">Users</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/config">Config</a>
-                        </li>
                     <?php } ?>
 
                 </ul>
@@ -72,7 +69,6 @@
                             &#91;<?= $activeUser->getID() ?>, <?= $activeUser->getAccountType()->name ?>&#93; <?= $activeUser->getUsername(); ?>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" id="btn-settings">Settings</a></li>
                             <li><a class="dropdown-item" id="btn-logout">Logout</a></li>
                         </ul>
                     </li>

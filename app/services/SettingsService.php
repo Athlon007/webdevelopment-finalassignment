@@ -1,5 +1,6 @@
 <?php
 require_once("../repositories/SettingsRepository.php");
+require_once("TopicService.php");
 
 class SettingsService
 {
@@ -8,6 +9,17 @@ class SettingsService
     public function __construct()
     {
         $this->repo = new SettingsRepository();
+
+        $topicService = new TopicService();
+
+        if ($this->getSettings()->getSelectedTopic() == null) {
+            $topicCount = $topicService->getTopicCount();
+            if ($topicCount == 0) {
+                return;
+            }
+            $this->repo->setSelectedNthTopic($topicCount - 1, date('y-m-d'));
+        }
+
         if ($this->isTimeToChangeTopic()) {
             $this->changeTopicToNext();
         }

@@ -4,13 +4,13 @@ require_once("Topic.php");
 
 class Settings
 {
-    private Topic $selectedTopic;
+    private ?Topic $selectedTopic;
     private DateTime $dateLastTopicSelected;
     private int $hideOptionsWithNReports;
     private int $maxReactionsPerPage;
 
     public function __construct(
-        Topic $selectedTopic,
+        ?Topic $selectedTopic,
         DateTime $dateLastTopicSelected,
         int $hideOptionsWithNReports,
         int $maxReactionsPerPage
@@ -21,7 +21,7 @@ class Settings
         $this->maxReactionsPerPage = $maxReactionsPerPage;
     }
 
-    public function getSelectedTopic(): Topic
+    public function getSelectedTopic(): ?Topic
     {
         return $this->selectedTopic;
     }

@@ -59,10 +59,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/users">Users</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/config">Config</a>
-                    </li>
-
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
@@ -70,7 +66,6 @@
                             &#91;<?= $activeUser->getID() ?>, <?= $activeUser->getAccountType()->name ?>&#93; <?= $activeUser->getUsername(); ?>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" id="btn-settings">Settings</a></li>
                             <li><a class="dropdown-item" id="btn-logout">Logout</a></li>
                         </ul>
                     </li>

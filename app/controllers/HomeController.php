@@ -21,14 +21,15 @@ class HomeController
         $settings = $settingsService->getSettings();
         $topic = $settings->getSelectedTopic();
 
-        $opinionService = new OpinionService();
-        $opinions = $sortby == "popular"
-            ? $opinionService->getOpinionsForTopicByPopular($topic)
-            : $opinionService->getOpinionsForTopicByNew($topic);
+        if ($topic != null) {
+            $opinionService = new OpinionService();
+            $opinions = $sortby == "popular"
+                ? $opinionService->getOpinionsForTopicByPopular($topic)
+                : $opinionService->getOpinionsForTopicByNew($topic);
 
-        $currentPage = $this->getCurrentPage();
-        $pagesCount = $opinionService->pagesForTopic($topic);
-
+            $currentPage = $this->getCurrentPage();
+            $pagesCount = $opinionService->pagesForTopic($topic);
+        }
         $reactionEntityService = new ReactionEntityService();
         $reactionEntites = $reactionEntityService->getAll();
 

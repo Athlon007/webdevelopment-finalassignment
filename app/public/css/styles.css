@@ -4,6 +4,7 @@ html {
     display: table;
     margin: auto;
     width: 100%;
+    height: 100%;
 }
 
 body {
@@ -12,6 +13,7 @@ body {
     vertical-align: middle;
     background-color: #fffbfa;
     color: #241e1e;
+    height: 100%;
 }
 
 h1 {
@@ -264,6 +266,21 @@ input[type=radio]:checked {
     border-radius: 1rem;
 }
 
+.foot>hr {
+    border-top: 1px solid #9c4046;
+    width: 100%;
+    max-width: 18rem;
+}
+
+.foot>ul {
+    padding: 0;
+}
+
+.foot>ul>li {
+    list-style-type: none;
+}
+
+
 
 .inline,
 .radio-list>input,
@@ -375,6 +392,7 @@ form>textarea {
     display: none;
     color: green;
 }
+
 
 
 @media screen and (max-width: 834px) {
