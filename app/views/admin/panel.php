@@ -91,7 +91,7 @@
         <?php } ?>
         <div class="row mt-2">
             <div class="col-md-8">
-                <div class="card">
+                <div class="card p-2">
                     <h2>Opinions</h2>
                     <form id="pick-topic" class="m-2">
                         <select class="form-select" name="topic" onchange="this.form.submit()">
@@ -135,7 +135,7 @@
                 </div>
             </div>
             <div class="col-md-4 overlay-on-small" id="editor">
-                <div class="card">
+                <div class="card p-2">
                     <h2>Editor</h2>
                     <form method="POST">
                         <input type="hidden" name="action" value="edit-opinion">

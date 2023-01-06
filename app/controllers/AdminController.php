@@ -420,4 +420,67 @@ class AdminController
         $activeUser = $this->activeUser;
         require("../views/admin/panel-users.php");
     }
+
+    public function reportsPanel()
+    {
+        require("../models/ReportType.php");
+        require("../services/ReportService.php");
+        $reportTypes = ReportType::cases();
+
+        $reportService = new ReportService();
+        $warnings = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["action"])) {
+            if (!$this->loginService->isLoggedIn()) {
+                echo "Cannot perform operation, if not logged in!";
+            }
+
+            try {
+                switch ($_POST["action"]) {
+                    case "dismiss-report":
+                        if (!isset($_POST["opinion-id"]) || strlen($_POST["opinion-id"]) == 0) {
+                            $warnings .= "Opinion-id is missing.";
+                            break;
+                        }
+
+                        $reportService->deleteReportsForOpinion($_POST["opinion-id"]);
+                        header("Location: /admin/reports");
+                        die();
+                        break;
+                    case "delete-opinion":
+                        require_once("../services/OpinionService.php");
+                        $opinionService = new OpinionService();
+                        $opinionService->deleteById($_POST["opinion-id"]);
+                        header("Location: /admin/reports");
+                        die();
+                        break;
+                    default:
+                        $this->globalActions();
+                        break;
+                }
+            } catch (IllegalOperationException $ex) {
+                $warnings .= $ex->getMessage();
+            } catch (PDOException $ex) {
+                $warnings .= $ex->getMessage();
+            }
+        }
+
+        $opinions = $reportService->getOpinionsWithReports();
+
+        $opinionsWithReportsCount = [];
+        foreach ($opinions as $opinion) {
+            $value = [
+                "opinion" => $opinion
+            ];
+
+            foreach ($reportTypes as $reportType) {
+                $value[$reportType->name] = $reportService->countReportsForOpinionByType($opinion, $reportType);
+            }
+
+            array_push($opinionsWithReportsCount, $value);
+        }
+
+        $activeUser = $this->activeUser;
+        require("../views/admin/panel-reports.php");
+    }
 }

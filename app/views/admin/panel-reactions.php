@@ -89,7 +89,7 @@
         <?php } ?>
         <div class="row mt-2">
             <div class="col-md-8">
-                <div class="card">
+                <div class="card p-2">
                     <h2>Reactions</h2>
                     <div class="m-2">
                         <div class="row align-items-center justify-content-center m-2">
@@ -125,7 +125,7 @@
                 </div>
             </div>
             <div class="col-md-4 overlay-on-small" id="editor">
-                <div class="card">
+                <div class="card p-2">
                     <h2>Editor</h2>
                     <form method="POST">
                         <input type="hidden" id="reaction-action" name="action" value="edit-reaction">
