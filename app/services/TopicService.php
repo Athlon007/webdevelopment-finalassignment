@@ -76,4 +76,10 @@ class TopicService
     {
         return $this->repo->getCount();
     }
+
+    public function isTopicWithIdPresent(int $id): bool
+    {
+        $id = htmlspecialchars($id);
+        return $this->repo->getCountById($id) > 0;
+    }
 }

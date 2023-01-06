@@ -96,7 +96,7 @@ class Router
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $controller->post($request);
         } else {
-            $controller->error("Unsupported method.");
+            $controller->get($request);
         }
     }
 }

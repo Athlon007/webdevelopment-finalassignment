@@ -1,7 +1,7 @@
 <?php
 require_once("Topic.php");
 
-class Opinion
+class Opinion implements JsonSerializable
 {
     private int $id;
     private string $title;
@@ -17,17 +17,17 @@ class Opinion
         $this->topic = $topic;
     }
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId(int $value) : void
+    public function setId(int $value): void
     {
         $this->id = $value;
     }
 
-    public function getTitle() : string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -37,33 +37,43 @@ class Opinion
         $this->title = $value;
     }
 
-    public function getContent() : string
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    public function setContent(string $value) : void
+    public function setContent(string $value): void
     {
         $this->content = $value;
     }
 
-    public function getTopic() : Topic
+    public function getTopic(): Topic
     {
         return $this->topic;
     }
 
-    public function setTopic(Topic $value) : void
+    public function setTopic(Topic $value): void
     {
         $this->topic = $value;
     }
 
-    public function getAllReactions() : array
+    public function getAllReactions(): array
     {
         return $this->reactions;
     }
 
-    public function setAllReactions(array $value) : void
+    public function setAllReactions(array $value): void
     {
         $this->reactions = $value;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            "id" => $this->id,
+            "title" => $this->title,
+            "content" => $this->content,
+            "reactions" => $this->reactions
+        ];
     }
 }

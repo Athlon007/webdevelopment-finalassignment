@@ -1,6 +1,6 @@
 <?php
 // This class stores information about one of allowed reactions.
-class ReactionEntity
+class ReactionEntity implements JsonSerializable
 {
     private int $id;
     private string $htmlEntity;
@@ -13,33 +13,38 @@ class ReactionEntity
         $this->isNegativeOpinion = $isNegativeOpinion;
     }
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId(int $value) : void
+    public function setId(int $value): void
     {
         $this->id = $value;
     }
 
-    public function getHtmlEntity() : string
+    public function getHtmlEntity(): string
     {
         return $this->htmlEntity;
     }
 
-    public function setHtmlEntity(string $value) : void
+    public function setHtmlEntity(string $value): void
     {
         $this->htmlEntity = $value;
     }
 
-    public function getIsNegativeOpinion() : bool
+    public function getIsNegativeOpinion(): bool
     {
         return $this->isNegativeOpinion;
     }
 
-    public function setIsNegativeOpinion(bool $value) : void
+    public function setIsNegativeOpinion(bool $value): void
     {
         $this->isNegativeOpinion = $value;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return get_object_vars($this);
     }
 }
