@@ -105,7 +105,7 @@
                                 ?>
                                     <tr id="reaction-<?= $reaction->getId() ?>">
                                         <td><?= $reaction->getId() ?></td>
-                                        <td><?= $reaction->getHtmlEntity() ?></td>
+                                        <td class="emoji"><?= $reaction->getHtmlEntity() ?></td>
                                         <td><?= $reaction->getIsNegativeOpinion() ? "Yes" : "No" ?></td>
                                         <td>
                                             <button onclick="startEditorReaction(<?= $reaction->getId() ?>);" class="btn btn-primary m-1 w-100">Edit</button>

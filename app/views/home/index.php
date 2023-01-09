@@ -64,7 +64,6 @@
                 <input id="btn-submit-report" type="button" value="Report">
             </form>
             <p id="warning-report" class="warning">Warning</p>
-            <p id="success-report" class="success">Success</p>
         </section>
     </section>
     <section class="popup" id="reaction-panel">

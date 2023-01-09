@@ -177,7 +177,6 @@ a:hover {
 }
 
 .opinion {
-    flex-wrap: wrap;
     display: flex;
     flex-flow: column;
     align-self: stretch;
@@ -234,7 +233,6 @@ input[type=submit] {
 input[type=text],
 input[type=password],
 textarea {
-    background-color: #f5f0f0;
     font-size: 1.2em;
     height: 2em;
     border-width: 0px;
@@ -277,7 +275,6 @@ input[type=radio]:checked {
     box-shadow: 0 0 0 2px #9c4046;
 }
 
-
 .foot {
     display: block;
     font-family: 'Taviraj', serif;
@@ -300,8 +297,6 @@ input[type=radio]:checked {
 .foot>ul>li {
     list-style-type: none;
 }
-
-
 
 .inline,
 .radio-list>input,
@@ -327,7 +322,6 @@ form>textarea {
     display: none;
     z-index: 100;
     background-color: rgba(0, 0, 0, 0.5);
-    display: none;
 }
 
 .overlay-content {
@@ -347,7 +341,6 @@ form>textarea {
     margin-top: 0rem;
     margin-bottom: 1rem;
 }
-
 
 .overlay-content>form>input {
     width: 32rem;
@@ -408,13 +401,6 @@ form>textarea {
     display: none;
     color: red;
 }
-
-.success {
-    display: none;
-    color: green;
-}
-
-
 
 @media screen and (max-width: 834px) {
     h1 {
