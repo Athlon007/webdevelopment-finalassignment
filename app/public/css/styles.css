@@ -83,7 +83,7 @@ input:disabled:hover {
 }
 
 .center,
-.page,
+.pages,
 .foot {
     text-align: center;
 }
@@ -179,7 +179,18 @@ a:hover {
     max-width: 50%;
 }
 
+.opinion>header,
 .opinion>main {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+}
+
+.opinion>main {
+    display: block;
+    flex-wrap: wrap;
     height: 100%;
     max-width: 100%;
 }
@@ -202,6 +213,10 @@ a:hover {
 .reaction>.emoji {
     padding: 0;
     font-size: 1em;
+}
+
+.reaction>p {
+    display: inline;
 }
 
 input[type=submit] {

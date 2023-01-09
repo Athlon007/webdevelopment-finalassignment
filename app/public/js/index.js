@@ -1,9 +1,10 @@
 // OPINION CREATOR
+let opinionPanel = document.getElementById('input-opinion-panel');
+let warningOpinion = document.getElementById('warning-opinion');
 // Title
 let titleInput = document.getElementById('title-input');
 let titleCharsetCounter = document.getElementById('title-char-counter');
 let titleMaxChars = titleInput.maxLength;
-
 // Content
 let contentInput = document.getElementById('content-input');
 let contentCharsetCounter = document.getElementById('content-char-counter');
@@ -68,11 +69,11 @@ for (let popup of popups) {
 
 // Ran when "create new opinion" panel is shown.
 function showOpinionPanel() {
-    let opinionPanel = document.getElementById('input-opinion-panel');
     let btnSubmit = document.getElementById('btn-submit-opinion');
     let mdiv = document.createElement("div");
     mdiv.innerHTML = "Send " + getNewSendButtonEntity();
     btnSubmit.value = (mdiv.textContent || mdiv.innerHTML);
+    warningOpinion.innerHTML = '';
     opinionPanel.style.display = 'block';
     cleanOpinionPanelForm();
 }
@@ -261,4 +262,130 @@ function createAlert(mainText) {
     popup.appendChild(main);
 
     document.body.prepend(popup);
+}
+
+document.getElementById('btn-submit-opinion').onclick = async function () {
+    let title = titleInput.value;
+    let content = contentInput.value;
+
+    let data = {
+        "title": title,
+        "content": content
+    };
+
+    let response;
+    await fetch('/api/send-opinion', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    })
+        .then(res => res.json())
+        .then(data => { response = data; })
+        .then(() => {
+            if (response.error_message != null) {
+                // Something went wrong.
+                warningOpinion.innerHTML = "Something went wrong while sending the opinion:<br>" + response.error_message;
+                warningOpinion.style.display = 'block';
+            } else {
+                createAlert(response.message);
+                cleanOpinionPanelForm();
+                opinionPanel.style.display = 'none';
+                loadOpinions();
+            }
+        });
+}
+
+async function loadOpinions() {
+    let parent = document.getElementById('opinions');
+
+    let sortByNew = document.getElementById('sort-by-new').checked;
+    let apiRequest = sortByNew ? "/api/opinions-new" : "/api/opinions";
+
+    let pageCount = getGET()["page"];
+    if (pageCount != undefined) {
+        apiRequest += "?page=" + pageCount;
+    } else {
+        pageCount = 1;
+    }
+
+    let response;
+    await fetch(apiRequest, {
+        method: 'GET'
+    })
+        .then(res => res.json())
+        .then(data => {
+            response = data;
+        });
+
+    parent.innerHTML = '';
+    for (const element of response.opinions) {
+        let opinionObject = element;
+        let opinion = document.createElement('article');
+        opinion.classList.add('opinion');
+
+        let header = document.createElement('header');
+        header.innerHTML = opinionObject.title;
+        opinion.appendChild(header);
+
+        let main = document.createElement('main');
+        main.innerHTML = opinionObject.content;
+        opinion.appendChild(main);
+
+        let reactions = document.createElement('section');
+        reactions.classList.add('reactions');
+        opinion.appendChild(reactions);
+
+        // Add reactions
+        for (const reaction of element.reactions) {
+            let reactionBtn = document.createElement('button');
+            reactionBtn.classList.add('reaction');
+            reactionBtn.onclick = function () { increaseExistingOpinionCount(opinionObject.id, reaction.reaction_entity.id); };
+            reactions.appendChild(reactionBtn);
+
+            let emoji = document.createElement('p');
+            emoji.classList.add('emoji');
+            emoji.innerHTML = ' ' + reaction.reaction_entity.htmlEntity + ' ';
+            reactionBtn.appendChild(emoji);
+
+            let count = document.createElement('p');
+            count.innerHTML = ' ' + reaction.count;
+            reactionBtn.appendChild(count);
+
+            reactions.innerHTML += ' ';
+        }
+
+        // Add new reaction button
+        let addNewReaction = document.createElement('button');
+        addNewReaction.classList.add('reaction');
+        addNewReaction.classList.add('btn-secondary');
+        addNewReaction.id = "button-add-reaction-" + opinionObject.id;
+        addNewReaction.onclick = function () { showReactionPanel(opinionObject.id); };
+        addNewReaction.innerHTML = "+";
+        reactions.appendChild(addNewReaction);
+
+        // Finally, report button.
+        let report = document.createElement('a');
+        report.classList.add('report-issue');
+        report.onclick = function () { showReport(opinionObject.id); };
+        report.innerHTML = 'Report...';
+        opinion.appendChild(report);
+
+        parent.appendChild(opinion);
+    }
+
+    // And now, load pages button...
+    let pages = document.getElementById('pages');
+    pages.innerHTML = '';
+    for (let i = 1; i < response.pages; ++i) {
+        let pageButton = document.createElement('button');
+        pageButton.classList.add(pageCount == i ? 'btn' : 'btn-secondary');
+        pageButton.onclick = () => { changePage(i) };
+
+        pages.appendChild(pageButton);
+    }
+}
+
+function getGET() {
+    var get = [];
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (a, name, value) { get[name] = value; });
+    return get;
 }

@@ -40,8 +40,9 @@
                 <textarea name="content" id="content-input" required maxlength="512" oninput="validateContentInput();"></textarea>
                 <label class="input-char-counter" id="content-char-counter">0/0</label>
                 <input type="hidden" name="topicID" value="<?= $topic->getId() ?>" />
-                <input id="btn-submit-opinion" class="emoji" type="submit" value="Send!">
+                <input id="btn-submit-opinion" class="emoji" type="button" value="Send!">
             </form>
+            <p id="warning-opinion" class="warning">Warning</p>
         </section>
     </section>
     <section class="overlay" id="input-report-panel">
@@ -63,7 +64,7 @@
                 <input id="btn-submit-report" type="button" value="Report">
             </form>
             <p id="warning-report" class="warning">Warning</p>
-            <p id="success-report" class="success">Warning</p>
+            <p id="success-report" class="success">Success</p>
         </section>
     </section>
     <section class="popup" id="reaction-panel">
@@ -94,22 +95,22 @@
     <section>
         <form class="radio-list" method="GET" id="sort-by-form">
             <label>
-                <input type="radio" name="sortby" value="popular" onclick="this.form.submit();" <?php if ($sortby == "popular") {
-                                                                                                    echo "checked";
-                                                                                                } ?>>
+                <input id="sort-by-popular" type="radio" name="sortby" value="popular" onclick="this.form.submit();" <?php if ($sortby == "popular") {
+                                                                                                                            echo "checked";
+                                                                                                                        } ?>>
                 Popular
                 </input>
             </label>
             <label>
-                <input type="radio" name="sortby" value="new" onclick="this.form.submit();" <?php if ($sortby == "new") {
-                                                                                                echo "checked";
-                                                                                            } ?>>
+                <input id="sort-by-new" type="radio" name="sortby" value="new" onclick="this.form.submit();" <?php if ($sortby == "new") {
+                                                                                                                    echo "checked";
+                                                                                                                } ?>>
                 New
                 </input>
             </label>
         </form>
     </section>
-    <section class="opinions">
+    <section class="opinions" id="opinions">
         <?php
         if (count($opinions) == 0) {
         ?>
@@ -133,7 +134,8 @@
                                                                                                                         echo $reactionID; ?>)">
                                 <p class="emoji">
                                     <?= $reaction->getReactionEntity()->getHtmlEntity() ?>
-                                </p> <?= $reaction->getCount() ?>
+                                </p>
+                                <p><?= $reaction->getCount() ?></p>
                             </button>
                         <?php } ?>
                         <button class="reaction btn-secondary" id="button-add-reaction-<?= $opinion->getId() ?>" onclick="showReactionPanel(<?= $opinion->getId() ?>);">+</button>
@@ -143,7 +145,7 @@
         <?php }
         } ?>
     </section>
-    <nav class="page">
+    <nav class="pages" id="pages">
         <?php
         for ($i = 0; $i < $pagesCount; $i++) {
         ?>
