@@ -156,7 +156,11 @@ function increaseExistingOpinionCount(opinionID, reactionID) {
 }
 
 function changePage(pageNumber) {
-    window.history.pushState(null, "Page " + pageNumber, "/?page=" + pageNumber)
+    let params = "page=" + pageNumber;
+    if (getGET()["sortby"] != undefined) {
+        params = "sortby=" + getGET()["sortby"] + "&" + params;
+    }
+    window.history.pushState(null, "Page " + pageNumber, "/?" + params)
     loadOpinions();
 }
 

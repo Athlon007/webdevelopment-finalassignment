@@ -56,9 +56,12 @@ class OpinionRepository extends Repository
             "WHERE topicID  = :topicID " .
             "GROUP BY Opinions.id ";
 
+        $query .= "ORDER BY reactions";
         if ($descending) {
-            $query = $query . "ORDER BY reactions DESC";
+            $query .= " DESC";
         }
+
+        $query .= ", id DESC";
 
         if ($limit >= 0) {
             $query = $query . " LIMIT $limit";

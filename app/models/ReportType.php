@@ -14,7 +14,7 @@ enum ReportType: int
         return match ($this) {
             ReportType::Hateful => "Hateful or abusive content",
             ReportType::Harassment => "Harassment or bulying",
-            ReportType::Misinformation => "Missinformation",
+            ReportType::Misinformation => "Misinformation",
             ReportType::Spam => "Spam or misleading"
         };
     }
@@ -26,7 +26,7 @@ enum ReportType: int
                 return ReportType::Hateful;
             case "Harassment or bulying":
                 return ReportType::Harassment;
-            case "Missinformation":
+            case "Misinformation":
                 return ReportType::Misinformation;
             case "Spam or misleading":
                 return ReportType::Spam;
