@@ -17,10 +17,14 @@ class OpinionService
         $this->settingsService = new SettingsService();
     }
 
-    public function getOpinionsForTopicByNew(Topic $topic)
+    public function getOpinionsForTopicByNew(Topic $topic, int $offset = -1, int $limit = -1)
     {
-        $offset = $this->getPageOffset();
-        $limit = $this->getOpinionsLimit();
+        if ($offset == -1) {
+            $offset = $this->getPageOffset();
+        }
+        if ($limit == -1) {
+            $limit = $this->getOpinionsLimit();
+        }
 
         $opinions = $this->repo->getOpinionsForTopic($topic, true, $offset, $limit);
 
@@ -35,10 +39,14 @@ class OpinionService
         return $opinions;
     }
 
-    public function getOpinionsForTopicByPopular(Topic $topic): array
+    public function getOpinionsForTopicByPopular(Topic $topic, int $offset = -1, int $limit = -1): array
     {
-        $offset = $this->getPageOffset();
-        $limit = $this->getOpinionsLimit();
+        if ($offset == -1) {
+            $offset = $this->getPageOffset();
+        }
+        if ($limit == -1) {
+            $limit = $this->getOpinionsLimit();
+        }
 
         $opinions = $this->repo->getOpinionsForTopicByPopularity($topic, true, $offset, $limit);
 

@@ -136,11 +136,10 @@ class ApiController
 
     private function printOpinions(Topic $topic, bool $byNew = false)
     {
-        $warnings = '';
-
         require_once("../services/OpinionService.php");
         $opinionService = new OpinionService();
         $opinions = $byNew ? $opinionService->getOpinionsForTopicByNew($topic) : $opinionService->getOpinionsForTopicByPopular($topic);
+
         echo json_encode($opinions);
     }
 }
