@@ -196,7 +196,9 @@ class LoginService
     {
         unset($_SESSION["user_id"]);
         unset($_SESSION["login_timestamp"]);
-        session_destroy();
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
     }
 
     /**
@@ -215,12 +217,13 @@ class LoginService
      * Returns the currently logged in user account.
      * @return Account Account that is currently logged-in.
      */
-    public function getCurrentlyLoggedInUser(): Account
+    public function getCurrentlyLoggedInUser(): ?Account
     {
         require_once("../models/Exceptions/SessionFailException.php");
         if (!isset($_SESSION["user_id"])) {
             $this->logout();
-            throw new SessionFailException("You have been logged out.");
+            return null;
+            //throw new SessionFailException("You have been logged out.");
         }
 
         return $this->repo->getAccountById($_SESSION["user_id"]);

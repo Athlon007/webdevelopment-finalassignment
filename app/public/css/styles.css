@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Roboto:wght@300;400;700&family=Taviraj&display=swap');
 
 html {
-    display: table;
-    margin: auto;
     width: 100%;
     height: 100%;
 }
@@ -86,6 +84,14 @@ input:disabled:hover {
 .pages,
 .foot {
     text-align: center;
+}
+
+.pages {
+    margin-top: 1rem;
+}
+
+.pages>button {
+    margin-right: 0.5rem;
 }
 
 .btn-secondary {
@@ -183,7 +189,7 @@ a:hover {
 .opinion>main {
     word-wrap: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: manual;
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
 }
@@ -415,19 +421,17 @@ form>textarea {
         margin-top: 0em;
     }
 
-    article {
-        flex-basis: 100%;
-        margin: 2em 0em 0em 0em;
-
-    }
-
     .opinions {
         justify-content: stretch;
-        flex-shrink: 0;
+        flex-shrink: 1;
     }
 
     .opinion {
-        max-width: 100%;
+        margin: 2em auto auto auto;
+        flex-basis: 90%;
+        flex-shrink: 0;
+        flex-grow: 0;
+        max-width: 90%;
     }
 
     .radio-list>label {

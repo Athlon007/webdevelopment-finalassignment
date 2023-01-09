@@ -111,48 +111,9 @@
         </form>
     </section>
     <section class="opinions" id="opinions">
-        <?php
-        if (count($opinions) == 0) {
-        ?>
-            <article class="opinion">
-                <header>No opinions on that topic just yet!<p class="emoji">&#128576;</p>
-                </header>
-                <main>Time to create a new one?</main>
-            </article>
-            <?php
-        } else {
-            foreach ($opinions as $opinion) {
-            ?>
-                <article class="opinion">
-                    <header><?= $opinion->getTitle() ?></header>
-                    <main><?= $opinion->getContent() ?></main>
-                    <section class="reactions">
-                        <?php
-                        foreach ($opinion->getAllReactions() as $reaction) {
-                        ?>
-                            <button class="reaction" onclick="increaseExistingOpinionCount(<?= $opinion->getId() ?>, <?php $reactionID = $reaction->getReactionEntity()->getID();
-                                                                                                                        echo $reactionID; ?>)">
-                                <p class="emoji">
-                                    <?= $reaction->getReactionEntity()->getHtmlEntity() ?>
-                                </p>
-                                <p><?= $reaction->getCount() ?></p>
-                            </button>
-                        <?php } ?>
-                        <button class="reaction btn-secondary" id="button-add-reaction-<?= $opinion->getId() ?>" onclick="showReactionPanel(<?= $opinion->getId() ?>);">+</button>
-                    </section>
-                    <a class="report-issue" onclick="showReport(<?= $opinion->getId() ?>);">Report...</a>
-                </article>
-        <?php }
-        } ?>
+
     </section>
     <nav class="pages" id="pages">
-        <?php
-        for ($i = 0; $i < $pagesCount; $i++) {
-        ?>
-            <button class="<?php echo ($i + 1 == $currentPage) ? 'btn' : 'btn-secondary' ?>" onclick="changePage(<?= strval($i + 1) ?>)"><?= strval($i + 1) ?></button>
-        <?php
-        }
-        ?>
     </nav>
     <footer class="foot">
         <ul>

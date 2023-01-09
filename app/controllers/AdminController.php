@@ -6,17 +6,12 @@ require_once("../models/Exceptions/NotLoggedInException.php");
 class AdminController
 {
     private LoginService $loginService;
-    private Account $activeUser;
+    private ?Account $activeUser;
 
     public function __construct()
     {
         $this->loginService = new LoginService();
-
-        try {
-            $this->activeUser = $this->loginService->getCurrentlyLoggedInUser();
-        } catch (SessionFailException $ex) {
-            $this->login();
-        }
+        $this->activeUser = $this->loginService->getCurrentlyLoggedInUser();
     }
 
     public function opinionsPanel()

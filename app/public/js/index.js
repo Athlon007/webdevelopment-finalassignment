@@ -156,28 +156,8 @@ function increaseExistingOpinionCount(opinionID, reactionID) {
 }
 
 function changePage(pageNumber) {
-    let form = $("<form style='display: none'></form>");
-
-    form.attr("method", "get");
-    form.attr("action", "/");
-
-    if (window.location.search.includes("sortby=")) {
-        let urlParams = new URLSearchParams(window.location.search);
-
-        let sortbyField = $('<input></input>');
-        sortbyField.attr("name", "sortby");
-        sortbyField.attr("value", urlParams.get("sortby"));
-        form.append(sortbyField);
-    }
-
-    let pageNumberField = $('<input></input>');
-    pageNumberField.attr("name", "page");
-    pageNumberField.attr("value", pageNumber);
-    form.append(pageNumberField);
-
-    $(document.body).append(form);
-
-    form.submit();
+    window.history.pushState(null, "Page " + pageNumber, "/?page=" + pageNumber)
+    loadOpinions();
 }
 
 let reportPanel = document.getElementById('input-report-panel');
@@ -294,7 +274,7 @@ document.getElementById('btn-submit-opinion').onclick = async function () {
         });
 }
 
-async function loadOpinions() {
+async function loadOpinions(doNotScrollToTop = false) {
     let parent = document.getElementById('opinions');
 
     let sortByNew = document.getElementById('sort-by-new').checked;
@@ -317,70 +297,92 @@ async function loadOpinions() {
         });
 
     parent.innerHTML = '';
-    for (const element of response.opinions) {
-        let opinionObject = element;
+
+    if (response.opinions.length == 0) {
+        // Show 'no opinions' message.
         let opinion = document.createElement('article');
         opinion.classList.add('opinion');
 
         let header = document.createElement('header');
-        header.innerHTML = opinionObject.title;
+        header.innerHTML = 'No opinions on that topic just yet!<p class="emoji">&#128576;</p>';
         opinion.appendChild(header);
 
         let main = document.createElement('main');
-        main.innerHTML = opinionObject.content;
+        main.innerHTML = 'Time to create a new one?';
         opinion.appendChild(main);
 
-        let reactions = document.createElement('section');
-        reactions.classList.add('reactions');
-        opinion.appendChild(reactions);
-
-        // Add reactions
-        for (const reaction of element.reactions) {
-            let reactionBtn = document.createElement('button');
-            reactionBtn.classList.add('reaction');
-            reactionBtn.onclick = function () { increaseExistingOpinionCount(opinionObject.id, reaction.reaction_entity.id); };
-            reactions.appendChild(reactionBtn);
-
-            let emoji = document.createElement('p');
-            emoji.classList.add('emoji');
-            emoji.innerHTML = ' ' + reaction.reaction_entity.htmlEntity + ' ';
-            reactionBtn.appendChild(emoji);
-
-            let count = document.createElement('p');
-            count.innerHTML = ' ' + reaction.count;
-            reactionBtn.appendChild(count);
-
-            reactions.innerHTML += ' ';
-        }
-
-        // Add new reaction button
-        let addNewReaction = document.createElement('button');
-        addNewReaction.classList.add('reaction');
-        addNewReaction.classList.add('btn-secondary');
-        addNewReaction.id = "button-add-reaction-" + opinionObject.id;
-        addNewReaction.onclick = function () { showReactionPanel(opinionObject.id); };
-        addNewReaction.innerHTML = "+";
-        reactions.appendChild(addNewReaction);
-
-        // Finally, report button.
-        let report = document.createElement('a');
-        report.classList.add('report-issue');
-        report.onclick = function () { showReport(opinionObject.id); };
-        report.innerHTML = 'Report...';
-        opinion.appendChild(report);
-
         parent.appendChild(opinion);
+    } else {
+        for (const element of response.opinions) {
+            let opinionObject = element;
+            let opinion = document.createElement('article');
+            opinion.classList.add('opinion');
+
+            let header = document.createElement('header');
+            header.innerHTML = opinionObject.title;
+            opinion.appendChild(header);
+
+            let main = document.createElement('main');
+            main.innerHTML = opinionObject.content;
+            opinion.appendChild(main);
+
+            let reactions = document.createElement('section');
+            reactions.classList.add('reactions');
+            opinion.appendChild(reactions);
+
+            // Add reactions
+            for (const reaction of element.reactions) {
+                let reactionBtn = document.createElement('button');
+                reactionBtn.classList.add('reaction');
+                reactionBtn.onclick = function () { increaseExistingOpinionCount(opinionObject.id, reaction.reaction_entity.id); };
+                reactions.appendChild(reactionBtn);
+
+                let emoji = document.createElement('p');
+                emoji.classList.add('emoji');
+                emoji.innerHTML = ' ' + reaction.reaction_entity.htmlEntity + ' ';
+                reactionBtn.appendChild(emoji);
+
+                let count = document.createElement('p');
+                count.innerHTML = ' ' + reaction.count;
+                reactionBtn.appendChild(count);
+
+                reactions.innerHTML += ' ';
+            }
+
+            // Add new reaction button
+            let addNewReaction = document.createElement('button');
+            addNewReaction.classList.add('reaction');
+            addNewReaction.classList.add('btn-secondary');
+            addNewReaction.id = "button-add-reaction-" + opinionObject.id;
+            addNewReaction.onclick = function () { showReactionPanel(opinionObject.id); };
+            addNewReaction.innerHTML = "+";
+            reactions.appendChild(addNewReaction);
+
+            // Finally, report button.
+            let report = document.createElement('a');
+            report.classList.add('report-issue');
+            report.onclick = function () { showReport(opinionObject.id); };
+            report.innerHTML = 'Report...';
+            opinion.appendChild(report);
+
+            parent.appendChild(opinion);
+        }
     }
 
     // And now, load pages button...
     let pages = document.getElementById('pages');
     pages.innerHTML = '';
-    for (let i = 1; i < response.pages; ++i) {
+    for (let i = 1; i <= response.pages; ++i) {
         let pageButton = document.createElement('button');
         pageButton.classList.add(pageCount == i ? 'btn' : 'btn-secondary');
-        pageButton.onclick = () => { changePage(i) };
+        pageButton.innerHTML = i;
+        pageButton.onclick = function () { changePage(i); };
 
         pages.appendChild(pageButton);
+    }
+
+    if (!doNotScrollToTop) {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
     }
 }
 
@@ -389,3 +391,5 @@ function getGET() {
     window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (a, name, value) { get[name] = value; });
     return get;
 }
+
+loadOpinions();

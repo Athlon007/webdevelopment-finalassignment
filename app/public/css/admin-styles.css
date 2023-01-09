@@ -18,3 +18,13 @@
         height: 100%;
     }
 }
+
+.rot-90 {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    width: 1px;
+    height: 90px;
+}

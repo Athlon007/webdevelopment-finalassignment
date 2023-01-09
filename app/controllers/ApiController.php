@@ -128,6 +128,8 @@ class ApiController
                 }
 
                 $this->printOpinions($topic, $sortByNew);
+            } elseif ($request == '/api/topics') {
+                $this->printTopics();
             } else {
                 $this->error("Unsupported request");
             }
@@ -146,11 +148,22 @@ class ApiController
         $opinions = $byNew ? $opinionService->getOpinionsForTopicByNew($topic) : $opinionService->getOpinionsForTopicByPopular($topic);
 
         $data = [
+            "topic" => $topic,
             "pages" => $opinionService->pagesForTopic($topic),
             "opinions" => $opinions
         ];
 
         header($_SERVER["SERVER_PROTOCOL"] . " 200 OK", true, 200);
         echo json_encode($data);
+    }
+
+    private function printTopics()
+    {
+        require_once("../services/TopicService.php");
+        $topicService = new TopicService();
+        $topics = $topicService->getAll();
+
+        header($_SERVER["SERVER_PROTOCOL"] . " 200 OK", true, 200);
+        echo json_encode($topics);
     }
 }

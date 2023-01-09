@@ -118,8 +118,8 @@
                                 ?>
                                     <tr id="opinion-<?= $opinion->getId() ?>">
                                         <td><?= $opinion->getId() ?></td>
-                                        <td><?= $opinion->getTitle() ?></td>
-                                        <td><?= $opinion->getContent() ?></td>
+                                        <td class="text-wrap text-break"><?= $opinion->getTitle() ?></td>
+                                        <td class="text-wrap text-break" class="width: 6rem"><?= $opinion->getContent() ?></td>
                                         <td>
                                             <button onclick="startEditorForOpinion(<?= $opinion->getId() ?>);" class="btn btn-primary m-1 w-100">Edit</button>
                                             <button onclick="deleteOpinionById(<?= $opinion->getId() ?>);" class="btn btn-danger m-1 w-100">Delete</button>

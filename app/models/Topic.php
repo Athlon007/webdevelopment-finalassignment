@@ -1,5 +1,5 @@
 <?php
-class Topic
+class Topic implements JsonSerializable
 {
     private int $id;
     private string $name;
@@ -10,17 +10,17 @@ class Topic
         $this->name = $name;
     }
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId($value) : void
+    public function setId($value): void
     {
         $this->id = $value;
     }
 
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -28,5 +28,13 @@ class Topic
     public function setName($value): void
     {
         $this->name = $value;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            "id" => $this->id,
+            "name" => $this->name
+        ];
     }
 }

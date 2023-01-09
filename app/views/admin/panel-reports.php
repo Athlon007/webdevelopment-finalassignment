@@ -94,12 +94,12 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Opinion</th>
-                                    <th class="col-2">Topic</th>
+                                    <th class="col-2">Opinion</th>
+                                    <th class="col-1">Topic</th>
                                     <?php
                                     foreach ($reportTypes as $reportType) {
                                     ?>
-                                        <th class="col-1"><?= $reportType->name ?></th>
+                                        <th class="col-1 text-wrap text-break"><?= $reportType->name ?></th>
                                     <?
                                     }
                                     ?>
@@ -111,7 +111,7 @@
                                 foreach ($opinionsWithReportsCount as $opinion) {
                                 ?>
                                     <tr>
-                                        <td><?= $opinion["opinion"]->getContent() ?></td>
+                                        <td class="text-break text-wrap"><?= $opinion["opinion"]->getContent() ?></td>
                                         <td><?= $opinion["opinion"]->getTopic()->getName() ?></td>
                                         <?php
                                         foreach ($reportTypes as $reportType) {
