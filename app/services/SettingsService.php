@@ -54,4 +54,16 @@ class SettingsService
 
         $this->repo->setSelectedNthTopic($nextID, date('y-m-d'));
     }
+
+    public function setMaxReactionsPerPage($value): void
+    {
+        $value = htmlspecialchars($value);
+
+        require_once("../models/Exceptions/IllegalOperationException.php");
+        if (!is_numeric($value)) {
+            throw new IllegalOperationException("Value must be a digit.");
+        }
+
+        $this->repo->setMaxReactionsPerPage($value);
+    }
 }

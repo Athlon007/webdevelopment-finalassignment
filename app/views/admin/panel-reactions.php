@@ -59,6 +59,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/users">Users</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/settings">Settings</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">

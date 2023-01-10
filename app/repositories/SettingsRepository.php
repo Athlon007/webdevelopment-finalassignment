@@ -41,4 +41,11 @@ class SettingsRepository extends Repository
         $stmt->bindValue("today", $today);
         $stmt->execute();
     }
+
+    public function setMaxReactionsPerPage(int $value): void
+    {
+        $stmt = $this->connection->prepare("UPDATE Settings SET maxReactionsPerPage = :value");
+        $stmt->bindValue(":value", $value);
+        $stmt->execute();
+    }
 }

@@ -62,6 +62,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="/admin/users">Users</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/settings">Settings</a>
+                        </li>
                     <?php } ?>
                 </ul>
                 <ul class="navbar-nav">

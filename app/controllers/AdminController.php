@@ -500,4 +500,39 @@ class AdminController
         $activeUser = $this->activeUser;
         require("../views/admin/panel-config.php");
     }
+
+    public function settingsPanel()
+    {
+        if ($this->activeUser->getAccountType() == AccountType::Moderator) {
+            header("Location: /admin");
+            die();
+        }
+        $warnings = "";
+
+        require_once("../services/SettingsService.php");
+        $settingsService = new SettingsService();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!$this->loginService->isLoggedIn()) {
+                echo "Cannot perform operation, if not logged in!";
+            }
+
+            try {
+                if (isset($_POST["showMaxOpinions"])) {
+                    $settingsService->setMaxReactionsPerPage($_POST["showMaxOpinions"]);
+                    header("Location: /admin/settings");
+                    die();
+                }
+            } catch (IllegalOperationException $ex) {
+                $warnings .= $ex->getMessage();
+            } catch (PDOException $ex) {
+                $warnings .= $ex->getMessage();
+            }
+        }
+
+        $settings = $settingsService->getSettings();
+
+        $activeUser = $this->activeUser;
+        require("../views/admin/panel-settings.php");
+    }
 }

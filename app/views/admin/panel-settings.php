@@ -24,9 +24,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="d-inline">Are you sure you want to delete the topic ID
+                    <p class="d-inline">Are you sure you want to delete the user ID
                     <p id="confirm-remove-id" class="font-weight-bold d-inline">-1</p>?</p>
-                    <p>This operation is irreversible and ALL opinions will be lost!</p>
+                    <p>This operation is irreversible!</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="modal-btn-yes">Yes</button>
@@ -47,13 +47,15 @@
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/admin">Opinions</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Topics</a>
-                    </li>
                     <?php if ($activeUser->getAccountType() == AccountType::Admin) { ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/reports">Reports</a>
+                            <a class="nav-link" href="/admin/topics">Topics</a>
                         </li>
+                    <?php } ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/reports">Reports</a>
+                    </li>
+                    <?php if ($activeUser->getAccountType() == AccountType::Admin) { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="/admin/reactions">Reactions</a>
                         </li>
@@ -61,10 +63,9 @@
                             <a class="nav-link" href="/admin/users">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/settings">Settings</a>
+                            <a class="nav-link active" href="#">Settings</a>
                         </li>
                     <?php } ?>
-
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
@@ -89,62 +90,29 @@
             </div>
         <?php } ?>
         <div class="row mt-2">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card p-2">
-                    <h2>Topics</h2>
+                    <h2>Settings</h2>
                     <div class="m-2">
-                        <div class="row align-items-center justify-content-center m-2">
-                            <button class="btn btn-success" id="btn-create-topic-editor">Create New Topic</button>
-                        </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th class="col-1">ID</th>
-                                    <th>Title</th>
-                                    <th class="col-2">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                foreach ($topics as $topic) {
-                                ?>
-                                    <tr id="topic-<?= $topic->getId() ?>">
-                                        <td><?= $topic->getId() ?></td>
-                                        <td><?= $topic->getName() ?></td>
-                                        <td>
-                                            <button onclick="startEditorTopic(<?= $topic->getId() ?>);" class="btn btn-primary m-1 w-100">Edit</button>
-                                            <button onclick="deleteTopicById(<?= $topic->getId() ?>);" class="btn btn-danger m-1 w-100">Delete</button>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
+                        <form method="POST">
+                            <div class="form-group">
+                                <label class="form-label" for="show-max-opinions">Max amount of opinions to show at once:</label>
+                                <input class="form-control" id="show-max-opinions" type="number" name="showMaxOpinions" value="<?= $settings->getMaxReactionsPerPage() ?>">
+                            </div>
+                            <div class="form-group mt-2">
+                                <input class="btn btn-primary" type="submit" value="Save">
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 overlay-on-small" id="editor">
-                <div class="card p-2">
-                    <h2>Editor</h2>
-                    <form method="POST">
-                        <input type="hidden" id="topic-action" name="action" value="edit-topic">
-                        <input type="hidden" id="topic-id" name="topic-id" value="">
-                        <div class="form-group m-2">
-                            <label for="title">Title</label>
-                            <input id="editor-title" maxlength="32" type="text" class="form-control" name="title" disabled>
-                        </div>
-                        <div class="form-group mt-4 m-2">
-                            <input id="btn-edit" class="btn btn-primary" type="submit" value="Update" disabled>
-                            <button type="button" id="btn-cancel-edit" class="btn btn-secondary">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
         </div>
     </div>
     <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="application/javascript" src="/js/admin-global.js"></script>
-    <script type="application/javascript" src="/js/admin-topics.js"></script>
+    <script type="application/javascript" src="/js/admin-reports.js"></script>
 </body>
 
 </html>

@@ -77,6 +77,10 @@ class Router
             case "/admin/setup-ready/":
                 $controller->setupComplete();
                 break;
+            case "/admin/settings":
+            case "/admin/settings/":
+                $controller->settingsPanel();
+                break;
             default:
                 $this->route404();
                 break;
