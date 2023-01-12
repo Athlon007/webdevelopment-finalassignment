@@ -213,6 +213,7 @@ a:hover {
     padding: 0.5em;
     min-width: 3em;
     max-width: 5em;
+    margin-right: 0.2em;
 }
 
 .reaction>.emoji {
@@ -390,12 +391,21 @@ form>textarea {
 .radio-block {
     display: inline-block;
     width: 100%;
-}
-
-.radio-block>* {
-    display: block;
     margin-bottom: 1rem;
 }
+
+
+.radio-block>input,
+.radio-block>label {
+    margin-bottom: 0.5rem;
+}
+
+.radio-block>label::after {
+    content: '\A';
+    white-space: pre;
+    margin-bottom: 1rem;
+}
+
 
 .warning {
     display: none;

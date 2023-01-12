@@ -14,12 +14,6 @@
 
 <body>
     <?php
-    if ($topic == null) {
-        echo "<h1>Oi', Admin!</h1>";
-        echo "<h2>Set the damn page first!</h2>";
-        echo "<button style='width: 100%' onclick='window.location.href = `/admin/topics`'>Go to admin panel</button>";
-        return;
-    }
     if (isset($_GET["message"])) {
     ?>
         <div class="popup dismisable popup-success">
@@ -39,7 +33,7 @@
                 <label for="content-input">What are your thoughts?</label>
                 <textarea name="content" id="content-input" required maxlength="512" oninput="validateContentInput();"></textarea>
                 <label class="input-char-counter" id="content-char-counter">0/0</label>
-                <input type="hidden" name="topicID" value="<?= $topic->getId() ?>" />
+                <input type="hidden" id="topicID" name="topicID" />
                 <input id="btn-submit-opinion" class="emoji" type="button" value="Send!">
             </form>
             <p id="warning-opinion" class="warning">Warning</p>
@@ -51,15 +45,6 @@
             <h2>Report abuse</h2>
             <form method="POST">
                 <div class="radio-block" id="report-types">
-                    <?php
-                    foreach ($reportTypes as $reportType) {
-                    ?>
-                        <label>
-                            <input type="radio" id="report-type-<?= $reportType->value ?>" name="reportType" value="<?= $reportType->value ?>" />
-                            <?= $reportType->asString() ?>
-                        </label>
-                    <?php
-                    } ?>
                 </div>
                 <input id="btn-submit-report" type="button" value="Report">
             </form>
@@ -68,23 +53,14 @@
     </section>
     <section class="popup" id="reaction-panel">
         <header>React!</header>
-        <main>
-            <?php
-            foreach ($reactionEntites as $reactionEntity) {
-            ?>
-                <button class="reaction emoji" onclick="addNewReactionToOpinion(<?= $reactionEntity->getId() ?>)">
-                    <?= $reactionEntity->getHtmlEntity() ?>
-                </button>
-            <?php
-            }
-            ?>
+        <main id="reactions">
             <input type="hidden" name="action" value="reaction" />
             <input type="hidden" id="opinion-reaction" name="opinionReaction" value="" />
         </main>
     </section>
     <header>
         <h1>Today's topic is...</h1>
-        <h2 class="topic"><?= $topic->getName() ?></h2>
+        <h2 class="topic" id="topic"></h2>
     </header>
     <section class="center">
         <button onclick="showOpinionPanel();" class="btn-write-topic">

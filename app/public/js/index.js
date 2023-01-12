@@ -176,7 +176,7 @@ function showReport(opinionID) {
 
     // Unselect all options.
     for (let i = 0; i < reportTypes.childElementCount; ++i) {
-        reportTypes.children[i].children[0].checked = false;
+        reportTypes.children[i].checked = false;
     }
 
 
@@ -184,10 +184,14 @@ function showReport(opinionID) {
         btnSubmitReport.disabled = true;
         // Get selected item.
         let selected = -1;
+        let counter = 0;
         for (let i = 0; i < reportTypes.childElementCount; ++i) {
-            if (reportTypes.children[i].children[0].checked) {
-                selected = i;
-                break;
+            if (reportTypes.children[i].type == 'radio') {
+                if (reportTypes.children[i].checked) {
+                    selected = counter;
+                    break;
+                }
+                counter++;
             }
         }
 
@@ -302,6 +306,9 @@ async function loadOpinions(doNotScrollToTop = false) {
 
     parent.innerHTML = '';
 
+    document.getElementById('topic').innerHTML = response.topic.name;
+    document.getElementById('topicID').value = response.topic.id;
+
     if (response.opinions.length == 0) {
         // Show 'no opinions' message.
         let opinion = document.createElement('article');
@@ -349,8 +356,6 @@ async function loadOpinions(doNotScrollToTop = false) {
                 let count = document.createElement('p');
                 count.innerHTML = ' ' + reaction.count;
                 reactionBtn.appendChild(count);
-
-                reactions.innerHTML += ' ';
             }
 
             // Add new reaction button
@@ -397,3 +402,51 @@ function getGET() {
 }
 
 loadOpinions();
+
+// Load reaction entities.
+async function loadReactions() {
+    let reactionsParent = document.getElementById('reactions');
+    await fetch('/api/reaction-entities', {
+        method: 'GET'
+    })
+        .then(res => res.json())
+        .then(data => {
+            for (const entry of data) {
+                let btnReaction = document.createElement('button');
+                btnReaction.classList.add('reaction');
+                btnReaction.classList.add('emoji');
+                btnReaction.onclick = function () { addNewReactionToOpinion(entry.id); }
+                btnReaction.innerHTML = entry.htmlEntity;
+
+                reactionsParent.appendChild(btnReaction);
+            }
+        });
+}
+
+loadReactions();
+
+async function loadReportTypes() {
+    await fetch('/api/report-types', {
+        method: 'GET'
+    })
+        .then(res => res.json())
+        .then(data => {
+            let reportsParent = document.getElementById('report-types');
+            for (const entry of data) {
+                let lblReport = document.createElement('label');
+                lblReport.htmlFor = 'report-type-' + entry.value;
+                lblReport.innerHTML = entry.name;
+
+                let inputReport = document.createElement('input');
+                inputReport.type = 'radio';
+                inputReport.id = 'report-type-' + entry.value;
+                inputReport.name = 'reportType';
+                inputReport.value = entry.value;
+                reportsParent.appendChild(inputReport);
+
+                reportsParent.appendChild(lblReport);
+            }
+        });
+}
+
+loadReportTypes();

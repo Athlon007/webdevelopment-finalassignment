@@ -2,7 +2,7 @@
 
 require_once("Exceptions/ReportTypeMissingException.php");
 
-enum ReportType: int
+enum ReportType: int implements JsonSerializable
 {
     case Hateful = 0;
     case Harassment = 1;
@@ -33,5 +33,13 @@ enum ReportType: int
             default:
                 throw new ReportTypeMissingException("Report type by the name '$value' does not exist.");
         }
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            "name" => $this->asString(),
+            "value" => $this->value
+        ];
     }
 }

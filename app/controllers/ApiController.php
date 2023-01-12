@@ -130,10 +130,18 @@ class ApiController
                 $this->printOpinions($topic, $sortByNew);
             } elseif ($request == '/api/topics') {
                 $this->printTopics();
+            } elseif (str_starts_with($request, '/api/topic')) {
+                $this->printTopic($request);
+            } elseif (str_starts_with($request, '/api/reaction-entities')) {
+                $this->printReactionEntities();
+            } elseif (str_starts_with($request, '/api/report-types')) {
+                $this->printReportTypes();
             } else {
                 $this->error("Unsupported request");
             }
         } catch (MissingArgumentsException $ex) {
+            $this->error($ex->getMessage());
+        } catch (IllegalOperationException $ex) {
             $this->error($ex->getMessage());
         } catch (Throwable $ex) {
             $this->error("Unhandled error");
@@ -165,5 +173,41 @@ class ApiController
 
         header($_SERVER["SERVER_PROTOCOL"] . " 200 OK", true, 200);
         echo json_encode($topics);
+    }
+
+    private function printTopic($request)
+    {
+        $topic = null;
+        if (is_numeric(basename($request))) {
+            require_once("../services/TopicService.php");
+            $topicService = new TopicService();
+            $topic = $topicService->getTopicById(basename($request));
+        } else {
+            require_once("../services/SettingsService.php");
+            $settingsService = new SettingsService();
+            $topic = $settingsService->getSettings()->getSelectedTopic();
+        }
+
+        header($_SERVER["SERVER_PROTOCOL"] . " 200 OK", true, 200);
+        echo json_encode($topic);
+    }
+
+    private function printReactionEntities()
+    {
+        require_once("../services/ReactionEntityService.php");
+        $reactionEntityService = new ReactionEntityService();
+        $entities = $reactionEntityService->getAll();
+
+        header($_SERVER["SERVER_PROTOCOL"] . " 200 OK", true, 200);
+        echo json_encode($entities);
+    }
+
+    private function printReportTypes()
+    {
+        require_once("../models/ReportType.php");
+        $reportTypes = ReportType::cases();
+
+        header($_SERVER["SERVER_PROTOCOL"] . " 200 OK", true, 200);
+        echo json_encode($reportTypes);
     }
 }

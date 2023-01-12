@@ -7,24 +7,10 @@ class HomeController
             $this->handlePost();
         }
 
-        require_once("../services/SettingsService.php");
-        require_once("../services/OpinionService.php");
-        require_once("../services/ReactionEntityService.php");
-        require_once("../models/ReportType.php");
-
         $sortby = "popular";
         if (isset($_GET) && isset($_GET["sortby"]) && $_GET["sortby"] == "new") {
             $sortby = "new";
         }
-
-        $settingsService = new SettingsService();
-        $settings = $settingsService->getSettings();
-        $topic = $settings->getSelectedTopic();
-
-        $reactionEntityService = new ReactionEntityService();
-        $reactionEntites = $reactionEntityService->getAll();
-
-        $reportTypes = ReportType::cases();
 
         require("../views/home/index.php");
     }
