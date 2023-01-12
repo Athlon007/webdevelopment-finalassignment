@@ -98,6 +98,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="show-max-opinions">Max amount of opinions to show at once:</label>
                                 <input class="form-control" id="show-max-opinions" type="number" name="showMaxOpinions" value="<?= $settings->getMaxReactionsPerPage() ?>">
+                                <small class="form-text form-muted">Set to -1 to show all opinions for topic at once.</small>
                             </div>
                             <div class="form-group mt-2">
                                 <input class="btn btn-primary" type="submit" value="Save">
