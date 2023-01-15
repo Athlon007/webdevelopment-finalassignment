@@ -45,8 +45,8 @@ for (let overlay of overlays) {
         };
 
         // And same for the on-click outside of the content bounds.
-        $(document).mouseup(function (e) {
-            if (!$(overlayContent).is(e.target) && $(overlayContent).has(e.target).length === 0) {
+        document.addEventListener("mouseup", function (e) {
+            if (e.target !== overlayContent && !overlayContent.contains(e.target) && overlay.style.display != 'none') {
                 overlay.style.display = 'none';
             }
         });
@@ -58,11 +58,11 @@ for (let overlay of overlays) {
 // Now do the similar thing for all popups (minus the close button, as popups aren't meant to have close button).
 let popups = document.getElementsByClassName('popup');
 for (let popup of popups) {
-    $(document).mouseup(function (e) {
-        if (!$(popup).is(e.target) && $(popup).has(e.target).length === 0) {
+    document.addEventListener("mouseup", function (e) {
+        if (e.target !== popup && !popup.contains(e.target) && popup.style.disabled != 'none') {
             popup.style.display = 'none';
         }
-    })
+    });
 }
 
 // Ran when "create new opinion" panel is shown.

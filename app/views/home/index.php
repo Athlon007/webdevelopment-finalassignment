@@ -95,7 +95,6 @@
             Copyright &copy; 2022 <a href="http://kfigura.nl">Konrad Figura</a>
         </p>
     </footer>
-    <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="application/javascript" src="/js/index.js"></script>
 </body>
 
