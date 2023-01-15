@@ -50,6 +50,13 @@ for (let overlay of overlays) {
                 overlay.style.display = 'none';
             }
         });
+
+        // On ESC key press, hide it too
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                overlay.style.display = 'none';
+            }
+        });
     } catch (ex) {
         console.log("Error while hooking overlay " + overlay + ": " + ex);
     }
@@ -66,7 +73,8 @@ for (let popup of popups) {
 }
 
 // Ran when "create new opinion" panel is shown.
-function showOpinionPanel() {
+//function showOpinionPanel()
+document.getElementById('btn-show-opinion-panel').onclick = function () {
     let btnSubmit = document.getElementById('btn-submit-opinion');
     let mdiv = document.createElement("div");
     mdiv.innerHTML = "Send " + getNewSendButtonEntity();
@@ -143,12 +151,34 @@ function increaseExistingOpinionCount(opinionID, reactionID) {
     addNewReactionToOpinion(reactionID);
 }
 
-function changePage(pageNumber) {
-    let params = "page=" + pageNumber;
-    if (getGET()["sortby"] != undefined) {
-        params = "sortby=" + getGET()["sortby"] + "&" + params;
+function setGETParam(name, value) {
+    let get = getGET();
+    let entries = Object.entries(get);
+
+    let str = '/?';
+    let isSet = false;
+    for (let entry of entries) {
+        if (entry[0] == name) {
+            str += entry[0] + '=' + value;
+            isSet = true;
+        } else {
+            str += entry[0] + '=' + entry[1];
+        }
+
+        if (entries.indexOf(entry) + 1 < entries.length) {
+            str += "&";
+        }
     }
-    window.history.pushState(null, "Page " + pageNumber, "/?" + params)
+
+    if (!isSet) {
+        str += (str == '/?' ? "" : "&") + name + "=" + value;
+    }
+
+    window.history.pushState(null, "Get", str);
+}
+
+function changePage(pageNumber) {
+    setGETParam('page', pageNumber);
     loadOpinions();
 }
 
@@ -332,7 +362,10 @@ async function loadOpinions(doNotScrollToTop = false) {
 
 function getGET() {
     var get = [];
-    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (a, name, value) { get[name] = value; });
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+        function (a, name, value) {
+            get[name] = value;
+        });
     return get;
 }
 
@@ -441,3 +474,21 @@ async function loadReportTypes() {
 }
 
 loadReportTypes();
+
+// Sorting option
+if (getGET()["sortby"] == 'new') {
+    document.getElementById('sort-by-new').checked = true;
+} else {
+    document.getElementById('sort-by-popular').checked = true;
+}
+
+document.getElementById('sort-by-new').onclick = function () {
+    setGETParam('sortby', 'new');
+    setGETParam('page', 1);
+    loadOpinions();
+}
+document.getElementById('sort-by-popular').onclick = function () {
+    setGETParam('sortby', 'popular');
+    setGETParam('page', 1);
+    loadOpinions();
+}

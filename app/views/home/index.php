@@ -54,27 +54,23 @@
         <h2 class="topic" id="topic"></h2>
     </header>
     <section class="center">
-        <button onclick="showOpinionPanel();" class="btn-write-topic">
+        <button id="btn-show-opinion-panel" class="btn-write-topic">
             <p class="emoji">&#9997;</p> Write opinion
         </button>
     </section>
     <section>
-        <form class="radio-list" method="GET" id="sort-by-form">
+        <div class="radio-list">
             <label>
-                <input id="sort-by-popular" type="radio" name="sortby" value="popular" onclick="this.form.submit();" <?php if ($sortby == "popular") {
-                                                                                                                            echo "checked";
-                                                                                                                        } ?>>
+                <input id="sort-by-popular" type="radio" name="sortby" value="popular">
                 Popular
                 </input>
             </label>
             <label>
-                <input id="sort-by-new" type="radio" name="sortby" value="new" onclick="this.form.submit();" <?php if ($sortby == "new") {
-                                                                                                                    echo "checked";
-                                                                                                                } ?>>
+                <input id="sort-by-new" type="radio" name="sortby" value="new">
                 New
                 </input>
             </label>
-        </form>
+            </form>
     </section>
     <section class="opinions" id="opinions">
 
