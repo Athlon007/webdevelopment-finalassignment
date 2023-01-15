@@ -1,5 +1,6 @@
 <?php
 require_once("../models/Exceptions/MissingArgumentsException.php");
+require_once("../models/Exceptions/IllegalOperationException.php");
 
 class ApiController
 {
@@ -50,14 +51,24 @@ class ApiController
 
                     $this->postOpinion($data);
                     break;
+                case "/api/react-to-opinion":
+                    $data = json_decode(file_get_contents("php://input"));
+                    if ($data == null) {
+                        throw new MissingArgumentsException("Unable to decode JSON.");
+                    }
+
+                    $this->reactToOpinion($data);
+                    break;
                 default:
                     $this->error("Unrecognized request: $request.");
                     break;
             }
         } catch (MissingArgumentsException $ex) {
             $this->error($ex->getMessage());
+        } catch (IllegalOperationException $ex) {
+            $this->error($ex->getMessage());
         } catch (Throwable $ex) {
-            $this->error("Unhandled error");
+            $this->error("Unhandled exception");
         }
     }
 
@@ -209,5 +220,33 @@ class ApiController
 
         header($_SERVER["SERVER_PROTOCOL"] . " 200 OK", true, 200);
         echo json_encode($reportTypes);
+    }
+
+    private function reactToOpinion($data)
+    {
+        if (!isset($data->opinion_id) || !is_numeric($data->opinion_id)) {
+            throw new IllegalOperationException("Opinion ID is not set or not a number.");
+        }
+
+        if (!isset($data->reaction_id) || !is_numeric($data->reaction_id)) {
+            throw new IllegalOperationException("Reaction ID is missing or not a number.");
+        }
+
+        require_once("../services/ReactionService.php");
+        $reactionService = new ReactionService();
+        $opinionID = $data->opinion_id;
+        $reactionID = $data->reaction_id;
+        $reactionService->addReaction($opinionID, $reactionID);
+
+        require_once("../services/OpinionService.php");
+        $opinionService = new OpinionService();
+        $opinion = $opinionService->getOpinionById($opinionID);
+
+        header($_SERVER["SERVER_PROTOCOL"] . " 200 OK", true, 200);
+        $data = [
+            "message" => "Added opinion successfully!",
+            "opinion" => $opinion
+        ];
+        echo json_encode($data);
     }
 }

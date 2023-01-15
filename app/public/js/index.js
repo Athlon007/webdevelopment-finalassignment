@@ -1,6 +1,6 @@
 // OPINION CREATOR
-let opinionPanel = document.getElementById('input-opinion-panel');
-let warningOpinion = document.getElementById('warning-opinion');
+const opinionPanel = document.getElementById('input-opinion-panel');
+const warningOpinion = document.getElementById('warning-opinion');
 // Title
 let titleInput = document.getElementById('title-input');
 let titleCharsetCounter = document.getElementById('title-char-counter');
@@ -19,9 +19,11 @@ reactionPanel.style.display = "none";
 let currentlyReactingToOpinion = -1;
 
 // List of emojis displayed next to "Send" button.
-let allowedSendEntities = ["&#128563;", "&#128561;", "&#129300;", "&#129763;",
+let allowedSendEntities = [
+    "&#128563;", "&#128561;", "&#129300;", "&#129763;",
     "&#129325;", "&#129323;", "&#128558;", "&#129396;", "&#128569;", "&#128576;",
-    "&#129299;", "&#129312;", "&#129315;", "&#129316;", "&#129322;", "&#129488;"]
+    "&#129299;", "&#129312;", "&#129315;", "&#129316;", "&#129322;", "&#129488;"
+]
 let lastSendEntity = '';
 
 // Find all overlays and add the "close" action to closing button.
@@ -30,12 +32,9 @@ for (let overlay of overlays) {
     try {
         let overlayContent = overlay.getElementsByClassName('overlay-content')[0];
 
-        var btnClose = null;
-        if (overlayContent != null) {
-            btnClose = overlayContent.getElementsByClassName('btn-overlay-close')[0];
-        } else {
-            btnClose = overlay.getElementsByClassName('btn-overlay-close')[0];
-        }
+        let btnClose = overlayContent != null
+            ? overlayContent.getElementsByClassName('btn-overlay-close')[0]
+            : overlay.getElementsByClassName('btn-overlay-close')[0];
 
         if (btnClose == null) {
             throw new Error('Close Button is missing');
@@ -53,7 +52,7 @@ for (let overlay of overlays) {
             }
         });
     } catch (ex) {
-        console.log("Eror while hooking overlay " + overlay + ": " + ex);
+        console.log("Error while hooking overlay " + overlay + ": " + ex);
     }
 }
 
@@ -109,9 +108,8 @@ function validateContentInput() {
 }
 
 // Show reaction panel, upon clicking the the "+" button in the opinion.
-function showReactionPanel(opinionID) {
-    let buttonSender = document.getElementById('button-add-reaction-' + opinionID);
-    let boundsButtonSender = buttonSender.getBoundingClientRect();
+function showReactionPanel(sender, opinionID) {
+    let boundsButtonSender = sender.getBoundingClientRect();
 
     let x = boundsButtonSender.left - boundsReactionPanel.width / 2 + boundsReactionPanel.width / 8 + window.scrollX;
     let y = boundsButtonSender.top - boundsReactionPanel.height - boundsButtonSender.height * 0.2 + window.scrollY;
@@ -123,31 +121,22 @@ function showReactionPanel(opinionID) {
     currentlyReactingToOpinion = opinionID;
 }
 
-function addNewReactionToOpinion(reactionID) {
-    let form = $('<form></form>');
+async function addNewReactionToOpinion(reactionID) {
+    let data = {
+        'opinion_id': currentlyReactingToOpinion,
+        'reaction_id': reactionID
+    };
 
-    form.attr("method", "post");
-    form.attr("action", "/");
-
-    let actionTypeField = $('<input></input>');
-    actionTypeField.attr("name", "actionType");
-    actionTypeField.attr("value", "reaction");
-    form.append(actionTypeField);
-
-    let opinionIDField = $('<input></input>');
-    opinionIDField.attr("name", "opinionID");
-    opinionIDField.attr("value", currentlyReactingToOpinion);
-    form.append(opinionIDField);
-
-    let reactionIDField = $('<input></input>');
-    reactionIDField.attr("name", "reactionID");
-    reactionIDField.attr("value", reactionID);
-    form.append(reactionIDField);
-
-    // The form needs to be a part of the document in
-    // order for us to be able to submit it.
-    $(document.body).append(form);
-    form.submit();
+    await fetch('/api/react-to-opinion', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    })
+        .then(res => res.json())
+        .then(data => {
+            let opinion = document.getElementById('opinion-' + currentlyReactingToOpinion);
+            const newOpinion = opinionBuilder(data.opinion);
+            opinion.replaceWith(newOpinion);
+        });
 }
 
 function increaseExistingOpinionCount(opinionID, reactionID) {
@@ -178,7 +167,6 @@ function showReport(opinionID) {
     for (let i = 0; i < reportTypes.childElementCount; ++i) {
         reportTypes.children[i].checked = false;
     }
-
 
     btnSubmitReport.onclick = function () {
         btnSubmitReport.disabled = true;
@@ -213,14 +201,13 @@ function showReport(opinionID) {
             body: JSON.stringify(data)
         })
             .then(res => res.json())
-            .then(data => { response = data; })
-            .then(() => {
-                if (response.error_message != null) {
+            .then(data => {
+                if (data.error_message != null) {
                     // Something went wrong.
                     warningReport.innerHTML = "Something went wrong while reporting the opinion:<br>" + response.error_message;
                     warningReport.style.display = 'block';
                 } else {
-                    createAlert(response.message);
+                    createAlert(data.message);
                     reportPanel.style.display = 'none';
                 }
             });
@@ -261,20 +248,18 @@ document.getElementById('btn-submit-opinion').onclick = async function () {
         "content": content
     };
 
-    let response;
     await fetch('/api/send-opinion', {
         method: 'POST',
         body: JSON.stringify(data)
     })
         .then(res => res.json())
-        .then(data => { response = data; })
-        .then(() => {
-            if (response.error_message != null) {
+        .then(data => {
+            if (data.error_message != null) {
                 // Something went wrong.
-                warningOpinion.innerHTML = "Something went wrong while sending the opinion:<br>" + response.error_message;
+                warningOpinion.innerHTML = "Something went wrong while sending the opinion:<br>" + data.error_message;
                 warningOpinion.style.display = 'block';
             } else {
-                createAlert(response.message);
+                createAlert(data.message);
                 cleanOpinionPanelForm();
                 opinionPanel.style.display = 'none';
                 loadOpinions();
@@ -325,56 +310,7 @@ async function loadOpinions(doNotScrollToTop = false) {
         parent.appendChild(opinion);
     } else {
         for (const element of response.opinions) {
-            let opinionObject = element;
-            let opinion = document.createElement('article');
-            opinion.classList.add('opinion');
-
-            let header = document.createElement('header');
-            header.innerHTML = opinionObject.title;
-            opinion.appendChild(header);
-
-            let main = document.createElement('main');
-            main.innerHTML = opinionObject.content;
-            opinion.appendChild(main);
-
-            let reactions = document.createElement('section');
-            reactions.classList.add('reactions');
-            opinion.appendChild(reactions);
-
-            // Add reactions
-            for (const reaction of element.reactions) {
-                let reactionBtn = document.createElement('button');
-                reactionBtn.classList.add('reaction');
-                reactionBtn.onclick = function () { increaseExistingOpinionCount(opinionObject.id, reaction.reaction_entity.id); };
-                reactions.appendChild(reactionBtn);
-
-                let emoji = document.createElement('p');
-                emoji.classList.add('emoji');
-                emoji.innerHTML = ' ' + reaction.reaction_entity.htmlEntity + ' ';
-                reactionBtn.appendChild(emoji);
-
-                let count = document.createElement('p');
-                count.innerHTML = ' ' + reaction.count;
-                reactionBtn.appendChild(count);
-            }
-
-            // Add new reaction button
-            let addNewReaction = document.createElement('button');
-            addNewReaction.classList.add('reaction');
-            addNewReaction.classList.add('btn-secondary');
-            addNewReaction.id = "button-add-reaction-" + opinionObject.id;
-            addNewReaction.onclick = function () { showReactionPanel(opinionObject.id); };
-            addNewReaction.innerHTML = "+";
-            reactions.appendChild(addNewReaction);
-
-            // Finally, report button.
-            let report = document.createElement('a');
-            report.classList.add('report-issue');
-            report.onclick = function () { showReport(opinionObject.id); };
-            report.innerHTML = 'Report...';
-            opinion.appendChild(report);
-
-            parent.appendChild(opinion);
+            parent.appendChild(opinionBuilder(element));
         }
     }
 
@@ -401,9 +337,64 @@ function getGET() {
     return get;
 }
 
+/** Creates a new opinion object from API response. */
+function opinionBuilder(element) {
+    let opinionObject = element;
+    let opinion = document.createElement('article');
+    opinion.classList.add('opinion');
+    opinion.id = "opinion-" + opinionObject.id;
+
+    let header = document.createElement('header');
+    header.innerHTML = opinionObject.title;
+    opinion.appendChild(header);
+
+    let main = document.createElement('main');
+    main.innerHTML = opinionObject.content;
+    opinion.appendChild(main);
+
+    let reactions = document.createElement('section');
+    reactions.classList.add('reactions');
+    opinion.appendChild(reactions);
+
+    // Add reactions
+    for (const reaction of element.reactions) {
+        let reactionBtn = document.createElement('button');
+        reactionBtn.classList.add('reaction');
+        reactionBtn.onclick = function () { increaseExistingOpinionCount(opinionObject.id, reaction.reaction_entity.id); };
+        reactions.appendChild(reactionBtn);
+
+        let emoji = document.createElement('p');
+        emoji.classList.add('emoji');
+        emoji.innerHTML = ' ' + reaction.reaction_entity.htmlEntity + ' ';
+        reactionBtn.appendChild(emoji);
+
+        let count = document.createElement('p');
+        count.innerHTML = ' ' + reaction.count;
+        reactionBtn.appendChild(count);
+    }
+
+    // Add new reaction button
+    let addNewReaction = document.createElement('button');
+    addNewReaction.classList.add('reaction');
+    addNewReaction.classList.add('btn-secondary');
+    addNewReaction.id = "button-add-reaction-" + opinionObject.id;
+    addNewReaction.onclick = function () { showReactionPanel(addNewReaction, opinionObject.id); };
+    addNewReaction.innerHTML = "+";
+    reactions.appendChild(addNewReaction);
+
+    // Finally, report button.
+    let report = document.createElement('a');
+    report.classList.add('report-issue');
+    report.onclick = function () { showReport(opinionObject.id); };
+    report.innerHTML = 'Report...';
+    opinion.appendChild(report);
+
+    return opinion;
+}
+
 loadOpinions();
 
-// Load reaction entities.
+/** Load reaction entities. */
 async function loadReactions() {
     let reactionsParent = document.getElementById('reactions');
     await fetch('/api/reaction-entities', {
@@ -425,6 +416,7 @@ async function loadReactions() {
 
 loadReactions();
 
+/** Load all available report types. */
 async function loadReportTypes() {
     await fetch('/api/report-types', {
         method: 'GET'

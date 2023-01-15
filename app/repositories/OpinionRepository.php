@@ -115,15 +115,19 @@ class OpinionRepository extends Repository
         $stmt->execute();
     }
 
-    public function selectById(int $opinionID): Opinion
+    public function selectById(int $opinionID): ?Opinion
     {
         $sql = "SELECT id, title, content FROM Opinions WHERE id = :opinionID";
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue(":opinionID", $opinionID, PDO::PARAM_INT);
         $stmt->execute();
 
-        $row = $stmt->fetch();
-        $opinion = new Opinion($row["id"], $row["title"], $row["content"], new Topic(-1, ""));
-        return $opinion;
+        $arrOutput = $this->opinionBuilder($stmt->fetchAll(), new Topic(-1, ""));
+
+        if (empty($arrOutput)) {
+            return null;
+        }
+
+        return $arrOutput[0];
     }
 }

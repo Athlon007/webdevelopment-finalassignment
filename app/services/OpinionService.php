@@ -120,10 +120,14 @@ class OpinionService
         $this->repo->update($id, $title, $content);
     }
 
-    public function getOpinionById(int $id): Opinion
+    public function getOpinionById(int $id): ?Opinion
     {
         $id = htmlspecialchars($id);
         $opinion = $this->repo->selectById($id);
+        $reactionService = new ReactionService();
+        $reactions = $reactionService->getAllForOpinion($opinion);
+        $opinion->setAllReactions($reactions);
+
         return $opinion;
     }
 }
