@@ -12,7 +12,6 @@ let contentMaxChars = contentInput.maxLength;
 
 // REACTION PANEL
 let reactionPanel = document.getElementById('reaction-panel');
-let reactionPanelJQ = $('#reaction-panel');
 reactionPanel.style.display = "block";
 let boundsReactionPanel = reactionPanel.getBoundingClientRect();
 reactionPanel.style.display = "none";
