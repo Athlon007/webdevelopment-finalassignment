@@ -187,7 +187,8 @@ a:hover {
 }
 
 .opinion>header,
-.opinion>main {
+.opinion>main,
+h2 {
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: manual;

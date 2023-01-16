@@ -4,6 +4,12 @@ Web Development project, share your opinion on stuff!
 
 <http://myopinion.kfigura.nl/>
 
+Please use the "developmentdb.sql" to populate the database, and edit config.php as needed.
+
+Requires **PHP 8.1** to run!
+
+Contains Nginx and Apache server configs (as I needed it for hosting on my server).
+
 ## Admin Panel Login
 
 ### Admin Account
