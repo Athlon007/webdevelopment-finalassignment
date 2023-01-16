@@ -12,8 +12,9 @@ class ReportService
         $this->repo = new ReportRepository();
     }
 
-    public function createReport(Opinion $opinion, ReportType $reportType): void
+    public function createReport(Opinion $opinion, $reportType): void
     {
+        $reportType = ReportType::asInt($reportType);
         $this->repo->createReport($opinion, $reportType);
     }
 
@@ -22,8 +23,9 @@ class ReportService
         return $this->repo->getOpinionsWithReports();
     }
 
-    public function countReportsForOpinionByType(Opinion $opinion, ReportType $reportType): int
+    public function countReportsForOpinionByType(Opinion $opinion, $reportType): int
     {
+        $reportType = ReportType::asInt($reportType);
         return $this->repo->countReportsForOpinionByType($opinion, $reportType);
     }
 

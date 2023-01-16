@@ -70,7 +70,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            &#91;<?= $activeUser->getID() ?>, <?= $activeUser->getAccountType()->name ?>&#93; <?= $activeUser->getUsername(); ?>
+                            &#91;<?= $activeUser->getID() ?>, <?= $activeUser->getAccountType() ?>&#93; <?= $activeUser->getUsername(); ?>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" id="btn-logout">Logout</a></li>
@@ -115,7 +115,7 @@
                                         <td><?= $account->getID() ?></td>
                                         <td><?= $account->getUsername() ?></td>
                                         <td><?= $account->getEmail() ?></td>
-                                        <td><?= $account->getAccountType()->asString() ?></td>
+                                        <td><?= $account->getAccountType() ?></td>
                                         <td>
                                             <button onclick="startEditor(<?= $account->getID() ?>);" class="btn btn-primary m-1 w-100">Edit</button>
                                             <button onclick="deleteById(<?= $account->getID() ?>);" class="btn btn-danger m-1 w-100">Delete</button>
@@ -154,7 +154,7 @@
                                 <?php
                                 foreach ($accountTypes as $accountType) {
                                 ?>
-                                    <option value="<?= $accountType->asString() ?>"><?= $accountType->asString() ?></option>
+                                    <option value="<?= $accountType ?>"><?= $accountType ?></option>
                                 <?php
                                 }
                                 ?>

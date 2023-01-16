@@ -483,7 +483,7 @@ class AdminController
             ];
 
             foreach ($reportTypes as $reportType) {
-                $value[$reportType->name] = $reportService->countReportsForOpinionByType($opinion, $reportType);
+                $value[$reportType] = $reportService->countReportsForOpinionByType($opinion, $reportType);
             }
 
             array_push($opinionsWithReportsCount, $value);

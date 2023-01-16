@@ -25,14 +25,13 @@ class ReportRepository extends Repository
         return $this->reportBuilder($stmt->fetchAll(), $opinion);
     }
 
-    public function createReport(Opinion $opinion, ReportType $reportType): void
+    public function createReport(Opinion $opinion, $reportType): void
     {
         $sql = "INSERT INTO Reports (opinionID, reportType) VALUES (:opinionID, :reportType)";
         $stmt = $this->connection->prepare($sql);
         $id = $opinion->getId();
         $stmt->bindParam(":opinionID", $id, PDO::PARAM_INT);
-        $reportTypeID = $reportType->value;
-        $stmt->bindParam(":reportType", $reportTypeID, PDO::PARAM_INT);
+        $stmt->bindParam(":reportType", $reportType, PDO::PARAM_INT);
         $stmt->execute();
     }
 
@@ -40,13 +39,10 @@ class ReportRepository extends Repository
     {
         $sql = "SELECT UNIQUE(r.opinionID) AS OpinionID, "
             . "o.title AS OpinionTitle, o.content AS OpinionContent, "
-            . "t.id AS TopicID, t.name AS TopicName, "
-            . "COUNT(r.opinionID) AS reportCount "
+            . "t.id AS TopicID, t.name AS TopicName "
             . "FROM Reports r "
             . "JOIN Opinions o ON r.opinionID = o.id "
-            . "JOIN Topics t ON t.id = o.topicID "
-            . "HAVING reportCount > 0 "
-            . "ORDER BY reportCount";
+            . "JOIN Topics t ON t.id = o.topicID ";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $this->buildOpinions($stmt->fetchAll());
@@ -76,13 +72,12 @@ class ReportRepository extends Repository
         return $output;
     }
 
-    public function countReportsForOpinionByType(Opinion $opinion, ReportType $reportType)
+    public function countReportsForOpinionByType(Opinion $opinion, $reportType)
     {
         $sql = "SELECT COUNT(id) AS occurences FROM Reports WHERE reportType = :reportType AND opinionID = :opinionID";
         $stmt = $this->connection->prepare($sql);
-        $reportTypeAsNumber = $reportType->value;
         $opinionID = $opinion->getId();
-        $stmt->bindParam(":reportType", $reportTypeAsNumber, PDO::PARAM_INT);
+        $stmt->bindParam(":reportType", $reportType, PDO::PARAM_INT);
         $stmt->bindParam(":opinionID", $opinionID, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch()["occurences"];

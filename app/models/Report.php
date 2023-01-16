@@ -6,9 +6,9 @@ class Report
 {
     private int $id;
     private Opinion $opinion;
-    private ReportType $reportType;
+    private $reportType;
 
-    public function __construct(int $id, Opinion $opinion, ReportType $reportType)
+    public function __construct(int $id, Opinion $opinion, $reportType)
     {
         $this->id = $id;
         $this->opinion = $opinion;
@@ -35,12 +35,12 @@ class Report
         $this->opinion = $opinion;
     }
 
-    public function getReportType(): ReportType
+    public function getReportType()
     {
         return $this->reportType;
     }
 
-    public function setReportType(ReportType $value): void
+    public function setReportType($value): void
     {
         $this->reportType = $value;
     }

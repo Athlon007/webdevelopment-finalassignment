@@ -40,7 +40,7 @@ class LoginRepository extends Repository
         string $email,
         string $passwordHash,
         string $salt,
-        AccountType $accountType
+        $accountType
     ) {
         $query = "INSERT INTO Accounts (username, email, passwordHash, salt, accountType) " .
             "VALUES (:username, :email, :passwordHash, :salt, :accountType)";
@@ -50,7 +50,7 @@ class LoginRepository extends Repository
         $stmt->bindParam(":passwordHash", $passwordHash, PDO::PARAM_STR);
         $stmt->bindParam(":salt", $salt, PDO::PARAM_STR);
 
-        $accountTypeNumber = $accountType->value;
+        $accountTypeNumber = AccountType::asInt($accountType);
         $stmt->bindParam(":accountType", $accountTypeNumber, PDO::PARAM_INT);
         $stmt->execute();
     }
@@ -97,7 +97,7 @@ class LoginRepository extends Repository
         return $this->accountsBuilder($stmt->fetchAll())[0];
     }
 
-    public function updateAccount(int $id, string $username, string $email, AccountType $accountType): void
+    public function updateAccount(int $id, string $username, string $email, $accountType): void
     {
         $query = "UPDATE Accounts SET username = :username, email = :email, accountType = :accountType WHERE id = :id";
         $stmt = $this->connection->prepare($query);
@@ -105,7 +105,7 @@ class LoginRepository extends Repository
         $stmt->bindParam(":username", $username, PDO::PARAM_STR);
         $stmt->bindParam(":email", $email, PDO::PARAM_STR);
 
-        $accountTypeNumber = $accountType->value;
+        $accountTypeNumber = AccountType::asInt($accountType);
         $stmt->bindParam(":accountType", $accountTypeNumber, PDO::PARAM_INT);
         $stmt->execute();
     }

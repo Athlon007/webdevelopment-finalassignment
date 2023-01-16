@@ -464,14 +464,14 @@ async function loadReportTypes() {
             let reportsParent = document.getElementById('report-types');
             for (const entry of data) {
                 let lblReport = document.createElement('label');
-                lblReport.htmlFor = 'report-type-' + entry.value;
-                lblReport.innerHTML = entry.name;
+                lblReport.htmlFor = 'report-type-' + data.indexOf(entry);
+                lblReport.innerHTML = entry;
 
                 let inputReport = document.createElement('input');
                 inputReport.type = 'radio';
-                inputReport.id = 'report-type-' + entry.value;
+                inputReport.id = 'report-type-' + data.indexOf(entry);
                 inputReport.name = 'reportType';
-                inputReport.value = entry.value;
+                inputReport.value = entry;
                 reportsParent.appendChild(inputReport);
 
                 reportsParent.appendChild(lblReport);

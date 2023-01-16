@@ -2,12 +2,12 @@
 
 require_once("Exceptions/ReportTypeMissingException.php");
 
-enum ReportType: int implements JsonSerializable
+class ReportType implements JsonSerializable
 {
-    case Hateful = 0;
-    case Harassment = 1;
-    case Misinformation = 2;
-    case Spam = 3;
+    const Hateful = "Hateful";
+    const Harassment = "Harassment";
+    const Misinformation = "Misinformation";
+    const Spam = "Spam";
 
     public function asString(): string
     {
@@ -19,7 +19,7 @@ enum ReportType: int implements JsonSerializable
         };
     }
 
-    public static function getByString(string $value): ReportType
+    public static function getByString(string $value)
     {
         switch ($value) {
             case "Hateful or abusive content":
@@ -39,7 +39,48 @@ enum ReportType: int implements JsonSerializable
     {
         return [
             "name" => $this->asString(),
-            "value" => $this->value
+            "value" => $this
         ];
+    }
+
+    public static function asInt($input)
+    {
+        switch ($input) {
+            case ReportType::Hateful:
+                return 0;
+                break;
+            case ReportType::Harassment:
+                return 1;
+                break;
+            case ReportType::Misinformation:
+                return 2;
+                break;
+            case ReportType::Spam:
+                return 3;
+                break;
+        }
+    }
+
+    public static function cases()
+    {
+        return [ReportType::Hateful, ReportType::Harassment, ReportType::Misinformation, ReportType::Spam];
+    }
+
+    public static function from(int $i)
+    {
+        switch ($i) {
+            case 0:
+                return ReportType::Hateful;
+                break;
+            case 1:
+                return ReportType::Harassment;
+                break;
+            case 2:
+                return ReportType::Misinformation;
+                break;
+            case 3:
+                return ReportType::Spam;
+                break;
+        }
     }
 }

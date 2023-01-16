@@ -1,10 +1,24 @@
 <?php
 require_once("../models/Exceptions/AccountTypeMissingException.php");
 
-enum AccountType: int
+class AccountType
 {
-    case Moderator = 0;
-    case Admin = 1;
+    const Moderator = "Moderator";
+    const Admin = "Admin";
+
+    public static function from(int $i)
+    {
+        switch ($i) {
+            case 0:
+                return AccountType::Moderator;
+                break;
+            case 1:
+                return AccountType::Admin;
+                break;
+            default:
+                throw new AccountTypeMissingException("No $i account type exists.");
+        }
+    }
 
     public function asString(): string
     {
@@ -14,7 +28,7 @@ enum AccountType: int
         };
     }
 
-    public static function getByString(string $value): AccountType
+    public static function getByString(string $value)
     {
         switch ($value) {
             case "Moderator":
@@ -24,5 +38,24 @@ enum AccountType: int
             default:
                 throw new AccountTypeMissingException("Account type by the name '$value' does not exist.");
         }
+    }
+
+    public static function cases()
+    {
+        return [AccountType::Moderator, AccountType::Admin];
+    }
+
+    public static function asInt($input)
+    {
+        switch ($input) {
+            case AccountType::Moderator:
+                return 0;
+                break;
+            case AccountType::Admin:
+                return 1;
+                break;
+        }
+
+        throw new IllegalOperationException("FUGGG");
     }
 }

@@ -70,7 +70,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            &#91;<?= $activeUser->getID() ?>, <?= $activeUser->getAccountType()->name ?>&#93; <?= $activeUser->getUsername(); ?>
+                            &#91;<?= $activeUser->getID() ?>, <?= $activeUser->getAccountType() ?>&#93; <?= $activeUser->getUsername(); ?>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" id="btn-logout">Logout</a></li>
@@ -102,7 +102,7 @@
                                     <?php
                                     foreach ($reportTypes as $reportType) {
                                     ?>
-                                        <th class="col-1 text-wrap text-break"><?= $reportType->name ?></th>
+                                        <th class="col-1 text-wrap text-break"><?= $reportType ?></th>
                                     <?
                                     }
                                     ?>
@@ -119,7 +119,7 @@
                                         <?php
                                         foreach ($reportTypes as $reportType) {
                                         ?>
-                                            <td><?= $opinion[$reportType->name] ?></td>
+                                            <td><?= $opinion[$reportType] ?></td>
                                         <?php
                                         } ?>
                                         <td>

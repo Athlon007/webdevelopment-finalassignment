@@ -1,4 +1,4 @@
-AddHandler php81-fastcgi .php
+AddHandler php80-fastcgi .php
 
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
