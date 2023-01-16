@@ -91,7 +91,7 @@
         </ul>
         <hr>
         <p>
-            Copyright &copy; 2022 <a href="http://kfigura.nl">Konrad Figura</a>
+            Copyright &copy; 2023 <a href="http://kfigura.nl">Konrad Figura</a>
         </p>
     </footer>
     <script type="application/javascript" src="/js/index.js"></script>

@@ -1,29 +1,24 @@
-# Docker template for PHP projects
-This repository provides a starting template for PHP application development.
+# My Opinion
 
-It contains:
-* NGINX webserver
-* PHP FastCGI Process Manager with PDO MySQL support
-* MariaDB (GPL MySQL fork)
-* PHPMyAdmin
+Web Development project, share your opinion on stuff!
 
-## Installation
+<http://myopinion.kfigura.nl/>
 
-1. Install Docker Desktop on Windows or Mac, or Docker Engine on Linux.
-1. Clone the project
+## Admin Panel Login
 
-## Usage
+### Admin Account
 
-In a terminal, run:
-```bash
-docker-compose up
-```
+- Username (case-insensitive): `admin`
+- Password (case-sensitive): `Password1!`
 
-NGINX will now serve files in the app/public folder. Visit localhost in your browser to check.
-PHPMyAdmin is accessible on localhost:8080
+### Moderator Account
 
-If you want to stop the containers, press Ctrl+C. 
-Or run:
-```bash
-docker-compose down
-```
+- Username: `moderator`
+- Password: `Password2@`
+
+## Author
+
+> Konrad Figura
+> 680886
+> IT2a
+> 2023

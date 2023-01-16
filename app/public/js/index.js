@@ -143,6 +143,7 @@ async function addNewReactionToOpinion(reactionID) {
             let opinion = document.getElementById('opinion-' + currentlyReactingToOpinion);
             const newOpinion = opinionBuilder(data.opinion);
             opinion.replaceWith(newOpinion);
+            reactionPanel.style.display = 'none';
         });
 }
 
@@ -294,7 +295,7 @@ document.getElementById('btn-submit-opinion').onclick = async function () {
                 warningOpinion.innerHTML = "Something went wrong while sending the opinion:<br>" + data.error_message;
                 warningOpinion.style.display = 'block';
             } else {
-                createAlert(data.message);
+                createAlert(data.message + "<br><br>Come back tomorrow for the next topic!");
                 cleanOpinionPanelForm();
                 opinionPanel.style.display = 'none';
                 loadOpinions();
