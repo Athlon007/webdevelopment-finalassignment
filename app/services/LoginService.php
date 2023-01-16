@@ -100,7 +100,13 @@ class LoginService
      */
     private function generateSalt(): string
     {
-        return random_bytes(self::SALT_LENGTH);
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+{}[]"|<>?,./`~';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < LoginService::SALT_LENGTH; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     /**

@@ -40,13 +40,10 @@ class ReportRepository extends Repository
     {
         $sql = "SELECT UNIQUE(r.opinionID) AS OpinionID, "
             . "o.title AS OpinionTitle, o.content AS OpinionContent, "
-            . "t.id AS TopicID, t.name AS TopicName, "
-            . "COUNT(r.opinionID) AS reportCount "
+            . "t.id AS TopicID, t.name AS TopicName "
             . "FROM Reports r "
             . "JOIN Opinions o ON r.opinionID = o.id "
-            . "JOIN Topics t ON t.id = o.topicID "
-            . "HAVING reportCount > 0 "
-            . "ORDER BY reportCount";
+            . "JOIN Topics t ON t.id = o.topicID ";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $this->buildOpinions($stmt->fetchAll());
