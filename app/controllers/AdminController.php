@@ -18,6 +18,9 @@ class AdminController
     {
         $warnings = "";
 
+        require_once("../services/SettingsService.php");
+        $settingService = new SettingsService();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["action"])) {
             if (!$this->loginService->isLoggedIn()) {
                 echo "Cannot perform operation, if not logged in!";
@@ -71,8 +74,6 @@ class AdminController
         $topicService = new TopicService();
         $topics = $topicService->getAll();
 
-        require_once("../services/SettingsService.php");
-        $settingService = new SettingsService();
         $settings = $settingService->getSettings();
         $topic = null;
         try {
@@ -91,7 +92,7 @@ class AdminController
         $opinions = array();
         if ($topic != null) {
             $opinionService = new OpinionService();
-            $opinions = $opinionService->getOpinionsForTopicByNew($topic);
+            $opinions = $opinionService->getOpinionsForTopicByNew($topic, 0, 9999999);
         }
 
         $activeUser = $this->activeUser;
@@ -199,6 +200,7 @@ class AdminController
 
         require_once("../services/TopicService.php");
         $topicService = new TopicService();
+        $settingsService = new SettingsService();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["action"])) {
             if (!$this->loginService->isLoggedIn()) {
@@ -234,6 +236,10 @@ class AdminController
                         header("Location: /admin/topics");
                         die();
                         break;
+                    case "force-next-topic":
+                        $settingsService->forceNextTopic();
+                        header("Location: /admin/topics");
+                        break;
                     default:
                         $this->globalActions();
                         break;
@@ -245,6 +251,8 @@ class AdminController
 
         $topics = $topicService->getAll();
         $activeUser = $this->activeUser;
+
+        $activeTopic = $settingsService->getSettings()->getSelectedTopic();
 
         require("../views/admin/panel-topics.php");
     }

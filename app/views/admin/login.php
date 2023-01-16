@@ -27,9 +27,6 @@
                     <div class="form-group mb-2">
                         <input type="submit" class="btn btn-primary" value="Login" />
                     </div>
-                    <div class="form-group">
-                        <a href="#">Forgot Password?</a>
-                    </div>
                     <div class="form-group mb-2">
                         <p class="text-danger" id="warnings">
                             <?php

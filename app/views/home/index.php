@@ -24,8 +24,11 @@
                 <label for="content-input">What are your thoughts?</label>
                 <textarea name="content" id="content-input" required maxlength="512" oninput="validateContentInput();"></textarea>
                 <label class="input-char-counter" id="content-char-counter">0/0</label>
-                <input type="hidden" id="topicID" name="topicID" />
-                <input id="btn-submit-opinion" class="emoji" type="button" value="Send!">
+                <label for="not-a-robot">
+                    <input type="checkbox" value="Pinky promise that I'm not a robot" id="not-a-robot" required>
+                    Pinky promise that I'm not a robot!
+                </label>
+                <input id="btn-submit-opinion" class="emoji" type="button">
             </form>
             <p id="warning-opinion" class="warning">Warning</p>
         </section>

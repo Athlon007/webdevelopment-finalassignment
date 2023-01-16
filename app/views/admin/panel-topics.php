@@ -92,6 +92,8 @@
             <div class="col-md-8">
                 <div class="card p-2">
                     <h2>Topics</h2>
+                    <button class="btn btn-danger" id="btn-force-next-topic">Force next topic</button>
+                    <small class="form-text form-muted">Forces the next topic to be selected as the active topic.</small>
                     <div class="m-2">
                         <div class="row align-items-center justify-content-center m-2">
                             <button class="btn btn-success" id="btn-create-topic-editor">Create New Topic</button>
@@ -109,8 +111,15 @@
                                 foreach ($topics as $topic) {
                                 ?>
                                     <tr id="topic-<?= $topic->getId() ?>">
-                                        <td><?= $topic->getId() ?></td>
-                                        <td><?= $topic->getName() ?></td>
+                                        <?php
+                                        if ($topic->getId() == $activeTopic->getId()) {
+                                        ?>
+                                            <td><b><?= $topic->getId() ?></b></td>
+                                            <td><b><?= $topic->getName() ?></b></td>
+                                        <? } else { ?>
+                                            <td><?= $topic->getId() ?></td>
+                                            <td><?= $topic->getName() ?></td>
+                                        <? } ?>
                                         <td>
                                             <button onclick="startEditorTopic(<?= $topic->getId() ?>);" class="btn btn-primary m-1 w-100">Edit</button>
                                             <button onclick="deleteTopicById(<?= $topic->getId() ?>);" class="btn btn-danger m-1 w-100">Delete</button>

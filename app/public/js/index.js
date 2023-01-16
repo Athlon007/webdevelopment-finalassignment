@@ -73,13 +73,13 @@ for (let popup of popups) {
 }
 
 // Ran when "create new opinion" panel is shown.
-//function showOpinionPanel()
 document.getElementById('btn-show-opinion-panel').onclick = function () {
     let btnSubmit = document.getElementById('btn-submit-opinion');
     let mdiv = document.createElement("div");
     mdiv.innerHTML = "Send " + getNewSendButtonEntity();
     btnSubmit.value = (mdiv.textContent || mdiv.innerHTML);
     warningOpinion.innerHTML = '';
+    document.getElementById('not-a-robot').checked = false;
     opinionPanel.style.display = 'block';
     cleanOpinionPanelForm();
 }
@@ -269,6 +269,12 @@ function createAlert(mainText) {
 }
 
 document.getElementById('btn-submit-opinion').onclick = async function () {
+    if (!document.getElementById('not-a-robot').checked) {
+        warningOpinion.innerHTML = 'Confirm that you are not a robot.';
+        warningOpinion.style.display = 'block';
+        return;
+    }
+
     let title = titleInput.value;
     let content = contentInput.value;
 
@@ -321,7 +327,6 @@ async function loadOpinions(doNotScrollToTop = false) {
     parent.innerHTML = '';
 
     document.getElementById('topic').innerHTML = response.topic.name;
-    document.getElementById('topicID').value = response.topic.id;
 
     if (response.opinions.length == 0) {
         // Show 'no opinions' message.

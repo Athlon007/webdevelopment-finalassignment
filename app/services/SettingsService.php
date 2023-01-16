@@ -66,4 +66,12 @@ class SettingsService
 
         $this->repo->setMaxReactionsPerPage($value);
     }
+
+    /**
+     * Forces the current topic to be abandoned and selects the next one from the list.
+     */
+    public function forceNextTopic(): void
+    {
+        $this->changeTopicToNext();
+    }
 }

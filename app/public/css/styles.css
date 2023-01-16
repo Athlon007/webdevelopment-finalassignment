@@ -62,9 +62,11 @@ input[type=submit]:active input[type=button]:active {
 }
 
 input[type=radio]:hover,
+input[type=checkbox]:hover,
 input[type=submit]:hover,
 button,
 label:has(input[type=radio]):hover,
+label:has(input[type=checkbox]):hover,
 a,
 input[type=button]:hover {
     cursor: pointer;
@@ -276,6 +278,23 @@ input[type=radio]:checked {
     box-shadow: 0 0 0 2px #9c4046;
 }
 
+input[type=checkbox] {
+    appearance: none;
+    border-radius: 8px;
+    background: transparent;
+    border: 3px solid #FFF;
+    box-shadow: 0 0 0 2px #241e1e;
+    width: 2em;
+    height: 2em;
+    margin-right: 2em;
+    vertical-align: middle;
+}
+
+input[type=checkbox]:checked {
+    background-color: #9c4046;
+    box-shadow: 0 0 0 2px #9c4046;
+}
+
 .foot {
     display: block;
     font-family: 'Taviraj', serif;
@@ -344,13 +363,14 @@ form>textarea {
 }
 
 .overlay-content>form>input {
-    width: 32rem;
+    width: 100%;
 }
 
 .overlay-content>form>input[type=button],
 .overlay-content>form>input[type=submit],
 .overlay-content>form>button {
     margin: auto;
+    margin-top: 1rem;
 }
 
 .popup {
@@ -410,6 +430,10 @@ form>textarea {
 .warning {
     display: none;
     color: red;
+}
+
+.checkbox-container {
+    margin-bottom: 2rem;
 }
 
 @media screen and (max-width: 834px) {

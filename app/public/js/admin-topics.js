@@ -60,3 +60,9 @@ function deleteTopicById(id) {
 
     $("#confirm-remove").modal('show');
 }
+
+document.getElementById('btn-force-next-topic').onclick = function () {
+    formBuilder('POST', '/admin/topics', {
+        "action": "force-next-topic"
+    });
+}
