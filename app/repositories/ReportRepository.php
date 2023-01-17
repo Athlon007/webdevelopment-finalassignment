@@ -37,8 +37,8 @@ class ReportRepository extends Repository
 
     public function getOpinionsWithReports(): array
     {
-        $sql = "SELECT UNIQUE(r.opinionID) AS OpinionID, "
-            . "o.title AS OpinionTitle, o.content AS OpinionContent, "
+        $sql = "SELECT DISTINCT(r.opinionID) AS OpinionID, "
+            . "o.title AS OpinionTitle, o.content AS OpinionC, "
             . "t.id AS TopicID, t.name AS TopicName "
             . "FROM Reports r "
             . "JOIN Opinions o ON r.opinionID = o.id "
@@ -65,7 +65,7 @@ class ReportRepository extends Repository
                 $topic = new Topic($row["TopicID"], $row["TopicName"]);
             }
 
-            $opinion = new Opinion($row["OpinionID"], $row["OpinionTitle"], $row["OpinionContent"], $topic);
+            $opinion = new Opinion($row["OpinionID"], $row["OpinionTitle"], $row["OpinionC"], $topic);
             array_push($output, $opinion);
         }
 
