@@ -28,3 +28,7 @@ Contains Nginx and Apache server configs (as I needed it for hosting on my serve
 > 680886
 > IT2a
 > 2023
+
+## Licence
+
+This program uses The MIT Licence. Feel free to use its code for any purpose!
